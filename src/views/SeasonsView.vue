@@ -20,8 +20,8 @@
                                 fill="white" />
                         </g>
                     </svg>
-                    <p class="end-date">20/01</p>
                 </div>
+                <p class="end-date">20/01</p>
             </div>
             <p class="state">étape : terminé</p>
         </div>
@@ -81,15 +81,24 @@
     </div>
 </template>
 <style scoped>
-.rank, .team-names, .victory, .ties, .defeat {
+.rank,
+.victory,
+.ties,
+.defeat {
     width: 20px;
 }
 
-.diff, .points {
+.diff,
+.points {
     width: 25px;
 }
 
-.titles, .team-item {
+.team-names {
+    width: 280px;
+}
+
+.titles,
+.team-item {
     display: flex;
     align-items: flex-start;
     gap: 8px;
@@ -106,7 +115,8 @@
     background: var(--embed-color-1, #5C47E0);
 }
 
-.divisions, .divisions-container {
+.divisions,
+.divisions-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -117,6 +127,11 @@
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+.arrow_forward {
+    width: 16px;
+    height: 16px;
 }
 
 .event {

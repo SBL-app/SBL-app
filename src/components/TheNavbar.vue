@@ -1,9 +1,9 @@
 <script setup>
-
+import { RouterLink } from 'vue-router';
 </script>
 <template>
     <div class="nav">
-        <a href="/">
+        <RouterLink to="/home">
             <div class="logo">
                 <div class="logo-sbl">
                 </div>
@@ -11,11 +11,11 @@
                     <p>Splatoon Baguette League</p>
                 </div>
             </div>
-        </a>
+        </RouterLink>
         <div class="links">
-            <a href="/home" class="active">Home</a>
+            <RouterLink to="/home">Home</RouterLink>
             <a href="/presentation">présentation</a>
-            <a href="/season">saisons</a>
+            <RouterLink to="/seasons">saisons</RouterLink>
             <a href="/event">évènements</a>
         </div>
         <div class="socials">
