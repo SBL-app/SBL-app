@@ -1,9 +1,13 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import IncomingEvents from '../components/IncomingEvents.vue'
+import TheSeasons from '../components/TheSeasons.vue'
+import ThePresentation from '../components/ThePresentation.vue'
+
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <IncomingEvents />
+  <TheSeasons />
+  <ThePresentation />
+
 </template>
