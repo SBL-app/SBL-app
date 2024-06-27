@@ -1,5 +1,5 @@
 <script setup>
-
+import { RouterLink } from 'vue-router'
 </script>
 <template>
     <div class="nav">
@@ -15,7 +15,7 @@
         <div class="links">
             <a href="/home" class="active">Home</a>
             <a href="/presentation">présentation</a>
-            <a href="/season">saisons</a>
+            <RouterLink to="/seasons">saisons</RouterLink>
             <a href="/event">évènements</a>
         </div>
         <div class="socials">
