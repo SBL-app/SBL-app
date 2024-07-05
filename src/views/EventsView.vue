@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup>
+import { RouterLink } from "vue-router";
+</script>
 <template>
   <div class="event-focus">
     <div class="event-container">
       <p class="title">Prochains évènements :</p>
-      <div class="event-item">
+      <router-link to="/event/2" class="event-item">
         <p id="season-title">Saison 2</p>
         <p id="team-number">10 équipes</p>
         <div class="dates">
@@ -25,11 +27,11 @@
           <p id="end-date">20/01</p>
         </div>
         <div class="inscription-status">
-          <p id="inscription-title">inscription : </p>
+          <p id="inscription-title">inscription :</p>
           <p id="inscription-status">terminé</p>
         </div>
-      </div>
-      <div class="event-item">
+      </router-link>
+      <router-link to="/event/3" class="event-item">
         <p id="season-title">Saison 3</p>
         <p id="team-number">13 équipes</p>
         <div class="dates">
@@ -51,10 +53,10 @@
           <p id="end-date">20/01</p>
         </div>
         <div class="inscription-status">
-          <p id="inscription-title">inscription : </p>
-          <p id="inscription-status"> en cours</p>
+          <p id="inscription-title">inscription :</p>
+          <p id="inscription-status">en cours</p>
         </div>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>

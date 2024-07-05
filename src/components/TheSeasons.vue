@@ -5,18 +5,18 @@ import { RouterLink } from "vue-router";
   <div class="season-container">
     <p class="title">Saisons :</p>
     <div class="seasons">
-      <router-link to="/seasons/1" class="season-item">
+      <router-link to="/division/1" class="season-item">
         <p class="item-title">Saison 1</p>
         <div class="progressbar"></div>
         <p class="item-status">Terminé</p>
       </router-link>
-      <router-link to="/seasons/2" class="season-item">
+      <router-link to="/division/2" class="season-item">
         <p class="item-title">Saison 2</p>
         <div class="progressbar"></div>
         <p class="item-status">Terminé</p>
       </router-link>
-      <router-link to="/seasons/3" class="season-item">
-        <p class="item-title">Saison 2</p>
+      <router-link to="/division/3" class="season-item">
+        <p class="item-title">Saison 3</p>
         <div class="progressbar"></div>
         <p class="item-status">Terminé</p>
       </router-link>
@@ -36,6 +36,7 @@ import { RouterLink } from "vue-router";
   justify-content: center;
   align-items: center;
   gap: 80px;
+  flex-wrap: wrap;
 }
 
 .season-item {

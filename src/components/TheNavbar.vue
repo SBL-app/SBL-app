@@ -16,7 +16,7 @@ import { RouterLink } from 'vue-router';
             <RouterLink to="/home">Home</RouterLink>
             <a href="/presentation">présentation</a>
             <RouterLink to="/seasons">saisons</RouterLink>
-            <a href="/events">évènements</a>
+            <RouterLink to="events">évènements</RouterLink>
         </div>
         <div class="socials">
             <a href="link-to-discord-server">
