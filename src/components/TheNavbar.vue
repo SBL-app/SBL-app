@@ -14,7 +14,6 @@ import { RouterLink } from 'vue-router';
         </RouterLink>
         <div class="links">
             <RouterLink to="/home">Home</RouterLink>
-            <a href="/presentation">présentation</a>
             <RouterLink to="/seasons">saisons</RouterLink>
             <RouterLink to="events">évènements</RouterLink>
         </div>

@@ -1,10 +1,10 @@
 <script setup>
-
+import { RouterLink } from "vue-router";
 </script>
 <template>
     <div class="event-container">
         <p class="title">Prochain évènements</p>
-        <div class="event">
+        <router-link to="/event/3" class="event">
             <p class="name">Saison 3</p>
             <p class="teams">13 équipes</p>
             <div class="dates">
@@ -25,7 +25,7 @@
                 <p class="endDate">20/01</p>
             </div>
             <p class="state">étape : inscription</p>
-        </div>
+        </router-link>
     </div>
 </template>
 <style scoped>
