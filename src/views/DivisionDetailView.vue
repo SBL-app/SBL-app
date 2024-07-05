@@ -35,146 +35,147 @@
       </div>
     </div>
     <div class="planning">
-        <p class="title">Planning</p>
-        <div class="week">
-            <p class="week-name">Semaine 1</p>
-            <div class="match">
-                <p class="team-name">team 1</p>
-                <p class="score">4</p>
-                <p class="vs">VS</p>
-                <p class="score">0</p>
-                <p class="team-name">team 2</p>
-            </div>
-            <div class="match">
-                <p class="team-name">team 1</p>
-                <p class="score">4</p>
-                <p class="vs">VS</p>
-                <p class="score">0</p>
-                <p class="team-name">team 2</p>
-            </div>
+      <p class="title">Planning</p>
+      <div class="week">
+        <p class="week-name">Semaine 1</p>
+        <div class="match">
+          <p class="team-name">team 1</p>
+          <p class="score">4</p>
+          <p class="vs">VS</p>
+          <p class="score">0</p>
+          <p class="team-name">team 2</p>
         </div>
-        <div class="week">
-            <p class="week-name">Semaine 1</p>
-            <div class="match">
-                <p class="team-name">team 1</p>
-                <p class="score">4</p>
-                <p class="vs">VS</p>
-                <p class="score">0</p>
-                <p class="team-name">team 2</p>
-            </div>
+        <div class="match">
+          <p class="team-name">team 1</p>
+          <p class="score">4</p>
+          <p class="vs">VS</p>
+          <p class="score">0</p>
+          <p class="team-name">team 2</p>
         </div>
+      </div>
+      <div class="week">
+        <p class="week-name">Semaine 1</p>
+        <div class="match">
+          <p class="team-name">team 1</p>
+          <p class="score">4</p>
+          <p class="vs">VS</p>
+          <p class="score">0</p>
+          <p class="team-name">team 2</p>
+        </div>
+      </div>
     </div>
     <div class="team-container">
-        <p class="title">équipes</p>
-        <div class="teams">
-            <div class="team-item">
-                <p class="team-title">team 1</p>
-                <div class="member-container">
-                    <p class="members-title">membres</p>
-                    <div class="membres">
-                        <p class="member">member 1</p>
-                        <p class="member">member 2</p>
-                        <p class="member">member 3</p>
-                        <p class="member">member 4</p>
-                    </div>
-                </div>
+      <p class="title">équipes</p>
+      <div class="teams">
+        <div class="team-item">
+          <p class="team-title">team 1</p>
+          <div class="member-container">
+            <p class="members-title">membres</p>
+            <div class="membres">
+              <p class="member">member 1</p>
+              <p class="member">member 2</p>
+              <p class="member">member 3</p>
+              <p class="member">member 4</p>
             </div>
-            <div class="team-item">
-                <p class="team-title">team 1</p>
-                <div class="member-container">
-                    <p class="members-title">membres</p>
-                    <div class="membres">
-                        <p class="member">member 1</p>
-                        <p class="member">member 2</p>
-                        <p class="member">member 3</p>
-                        <p class="member">member 4</p>
-                    </div>
-                </div>
-            </div>
-            <div class="team-item">
-                <p class="team-title">team 1</p>
-                <div class="member-container">
-                    <p class="members-title">membres</p>
-                    <div class="membres">
-                        <p class="member">member 1</p>
-                        <p class="member">member 2</p>
-                        <p class="member">member 3</p>
-                        <p class="member">member 4</p>
-                    </div>
-                </div>
-            </div>
-            <div class="team-item">
-                <p class="team-title">team 1</p>
-                <div class="member-container">
-                    <p class="members-title">membres</p>
-                    <div class="membres">
-                        <p class="member">member 1</p>
-                        <p class="member">member 2</p>
-                        <p class="member">member 3</p>
-                        <p class="member">member 4</p>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="team-item">
+          <p class="team-title">team 1</p>
+          <div class="member-container">
+            <p class="members-title">membres</p>
+            <div class="membres">
+              <p class="member">member 1</p>
+              <p class="member">member 2</p>
+              <p class="member">member 3</p>
+              <p class="member">member 4</p>
+            </div>
+          </div>
+        </div>
+        <div class="team-item">
+          <p class="team-title">team 1</p>
+          <div class="member-container">
+            <p class="members-title">membres</p>
+            <div class="membres">
+              <p class="member">member 1</p>
+              <p class="member">member 2</p>
+              <p class="member">member 3</p>
+              <p class="member">member 4</p>
+            </div>
+          </div>
+        </div>
+        <div class="team-item">
+          <p class="team-title">team 1</p>
+          <div class="member-container">
+            <p class="members-title">membres</p>
+            <div class="membres">
+              <p class="member">member 1</p>
+              <p class="member">member 2</p>
+              <p class="member">member 3</p>
+              <p class="member">member 4</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <style scoped>
 .members-title {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 .team-title {
-    font-size: 30px;
+  font-size: 30px;
 }
 .members {
-    display: flex;
-width: 100px;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-gap: 11px;
+  display: flex;
+  width: 100px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 11px;
 }
 .member-container {
-    display: flex;
-flex-direction: column;
-align-items: center;
-gap: 20px;
-align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
 }
 .team-item {
-    display: flex;
-padding: 38px 31px;
-flex-direction: column;
-align-items: center;
-gap: 25px;
-border-radius: 20px;
-background: var(--embed-color-2, #190D3F);
+  display: flex;
+  padding: 38px 31px;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  border-radius: 20px;
+  background: var(--embed-color-2, #190d3f);
 }
 .teams {
-    display: flex;
-justify-content: center;
-align-items: center;
-align-content: center;
-gap: 84px;
-align-self: stretch;
-flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: 84px;
+  align-self: stretch;
+  flex-wrap: wrap;
 }
 .team-name {
-    width: 200px;
+  width: 200px;
 }
-.match {display: flex;
-justify-content: center;
-align-items: center;
-gap: 16px;
+.match {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
 }
 .week {
-    display: flex;
-padding: 26px 66px;
-flex-direction: column;
-align-items: center;
-gap: 20px;
-border-radius: 20px;
-background: var(--embed-color-2, #190D3F);
+  display: flex;
+  padding: 26px 66px;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  border-radius: 20px;
+  background: var(--embed-color-2, #190d3f);
 }
 .division-datas {
   display: flex;
@@ -185,7 +186,8 @@ background: var(--embed-color-2, #190D3F);
   border-radius: 20px;
   background: var(--embed-color-1, #5c47e0);
 }
-.titles p, .team p{
+.titles p,
+.team p {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -213,7 +215,8 @@ p {
   font-weight: 400;
   line-height: normal;
 }
-.titles, .team {
+.titles,
+.team {
   display: inline-flex;
   align-items: center;
   gap: 39px;

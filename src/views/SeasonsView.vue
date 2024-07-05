@@ -1,10 +1,8 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-import TheSeasons from '@/components/TheSeasons.vue';
+import { RouterLink } from "vue-router";
+import TheSeasons from "@/components/TheSeasons.vue";
 </script>
 <template>
-    <TheSeasons />
+  <TheSeasons />
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>
