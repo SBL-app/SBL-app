@@ -17,18 +17,9 @@ onBeforeMount(() => {
   <div class="season-container">
     <p class="title">Saisons :</p>
     <div class="seasons">
-      <router-link to="/division/1" class="season-item">
-        <p class="item-title">Saison 1</p>
-        <div class="progressbar"></div>
-        <p class="item-status">Terminé</p>
-      </router-link>
-      <router-link to="/division/2" class="season-item">
-        <p class="item-title">Saison 2</p>
-        <div class="progressbar"></div>
-        <p class="item-status">Terminé</p>
-      </router-link>
-      <router-link to="/division/3" class="season-item">
-        <p class="item-title">Saison 3</p>
+      
+      <router-link to="{ name: 'season', params: { season: season.id }}" class="season-item" v-for="season in seasons" :key="season.id">
+        <p class="item-title">{{ season.name }}</p>
         <div class="progressbar"></div>
         <p class="item-status">Terminé</p>
       </router-link>
