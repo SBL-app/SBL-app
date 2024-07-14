@@ -1,5 +1,17 @@
 <script setup>
 import { RouterLink } from "vue-router";
+import { useSeasonStore } from "@/stores/seasons";
+import { storeToRefs } from "pinia";
+import { onBeforeMount } from "vue";
+
+const seasonStore = useSeasonStore();
+const { fetchAllSeasons } = seasonStore;
+const { seasons } = storeToRefs(seasonStore);
+
+onBeforeMount(() => {
+  fetchAllSeasons();
+});
+
 </script>
 <template>
   <div class="season-container">
