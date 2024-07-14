@@ -1,12 +1,28 @@
-<script setup></script>
+<script setup>
+import { useRoute } from "vue-router";
+import { useSeasonStore } from "@/stores/seasons";
+import { storeToRefs } from "pinia";
+import { onBeforeMount } from "vue";
+
+const route = useRoute();
+const seasonStore = useSeasonStore();
+const { fetchSeason } = seasonStore;
+const { season } = storeToRefs(seasonStore);
+
+
+onBeforeMount(() => {
+  const seasonId = route.params.id;
+  fetchSeason(seasonId);
+});
+</script>
 <template>
   <div class="division-focus">
-    <p class="title">Saison 2 :</p>
+    <p class="title">{{ season.name }}</p>
     <div class="event">
-      <p class="event-title">Saison 2</p>
+      <p class="event-title">{{season.name}}</p>
       <p class="team-number">13 équipes</p>
       <div class="dates">
-        <p class="start-date">01/01</p>
+        <p class="start-date">{{ season.start_date }}</p>
         <div class="arrow_forward">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +50,7 @@
             </g>
           </svg>
         </div>
-        <p class="end-date">20/01</p>
+        <p class="end-date">{{ season.end_date }}</p>
       </div>
       <p class="state">étape : terminé</p>
     </div>

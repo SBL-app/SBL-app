@@ -24,7 +24,7 @@ const router = createRouter({
       component: SeasonsView,
     },
     {
-      path: "/season/:season",
+      path: "/season/:id",
       name: "season",
       component: SeasonDetailView,
     },
