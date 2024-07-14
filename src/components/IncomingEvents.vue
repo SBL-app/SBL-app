@@ -38,7 +38,7 @@ import { RouterLink } from "vue-router";
         </div>
         <p class="endDate">20/01</p>
       </div>
-      <p class="state">étape : inscription</p>
+      <p class="state">étape : terminé</p>
     </router-link>
   </div>
 </template>

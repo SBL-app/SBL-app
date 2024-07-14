@@ -18,7 +18,7 @@ onBeforeMount(() => {
     <p class="title">Saisons :</p>
     <div class="seasons">
       
-      <router-link to="{ name: 'season', params: { season: season.id }}" class="season-item" v-for="season in seasons" :key="season.id">
+      <router-link :to="{ name: 'season', params: { season: season.id }}" class="season-item" v-for="season in seasons" :key="season.id">
         <p class="item-title">{{ season.name }}</p>
         <div class="progressbar"></div>
         <p class="item-status">Terminé</p>
