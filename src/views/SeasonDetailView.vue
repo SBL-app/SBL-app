@@ -1,6 +1,7 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { useSeasonStore } from "@/stores/seasons";
+import { useDivisionStore } from "@/stores/division";
 import { storeToRefs } from "pinia";
 import { onBeforeMount } from "vue";
 
@@ -9,17 +10,21 @@ const seasonStore = useSeasonStore();
 const { fetchSeason } = seasonStore;
 const { season } = storeToRefs(seasonStore);
 
+const divisionStore = useDivisionStore();
+const { fetchDivisionBySeason } = divisionStore;
+const { divisions } = storeToRefs(divisionStore);
 
 onBeforeMount(() => {
   const seasonId = route.params.id;
   fetchSeason(seasonId);
+  fetchDivisionBySeason(seasonId);
 });
 </script>
 <template>
   <div class="division-focus">
     <p class="title">{{ season.name }}</p>
     <div class="event">
-      <p class="event-title">{{season.name}}</p>
+      <p class="event-title">{{ season.name }}</p>
       <p class="team-number">13 équipes</p>
       <div class="dates">
         <p class="start-date">{{ season.start_date }}</p>
@@ -57,8 +62,8 @@ onBeforeMount(() => {
     <div class="divisions-container">
       <p class="title">Divisions :</p>
       <div class="divisions">
-        <div class="division">
-          <p class="division-title">Division 1</p>
+        <div class="division" v-for="division in divisions" :key="division.id">
+          <p class="division-title">{{ division.name }}</p>
           <div class="titles">
             <p class="rank">P</p>
             <p class="team-names">équipes</p>

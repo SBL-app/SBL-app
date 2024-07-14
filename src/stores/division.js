@@ -13,6 +13,11 @@ export const useDivisionStore = defineStore("divisions", () => {
     divisions.value = await response.json();
   };
 
+  const fetchDivisionBySeason = async (seasonId) => {
+    const response = await ky.get(`${API_URL}/division/season/${seasonId}`);
+    divisions.value = await response.json();
+  }
+
   const fetchDivision = async (id) => {
     const response = await ky.get(`${API_URL}/division/${id}`);
     division.value = await response.json();
@@ -22,6 +27,7 @@ export const useDivisionStore = defineStore("divisions", () => {
     divisions,
     division,
     fetchAllDivisions,
+    fetchDivisionBySeason,
     fetchDivision,
   };
 })
