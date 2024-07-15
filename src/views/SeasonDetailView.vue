@@ -2,6 +2,7 @@
 import { useRoute } from "vue-router";
 import { useSeasonStore } from "@/stores/seasons";
 import { useDivisionStore } from "@/stores/division";
+import { useTeamStatStore } from "@/stores/teamStat";
 import { storeToRefs } from "pinia";
 import { onBeforeMount } from "vue";
 
@@ -14,10 +15,17 @@ const divisionStore = useDivisionStore();
 const { fetchDivisionBySeason } = divisionStore;
 const { divisions } = storeToRefs(divisionStore);
 
+const teamStatStore = useTeamStatStore();
+const { fetchTeamStatsByDivisionId } = teamStatStore;
+const { teamStats } = storeToRefs(teamStatStore);
+
 onBeforeMount(() => {
   const seasonId = route.params.id;
   fetchSeason(seasonId);
   fetchDivisionBySeason(seasonId);
+  divisions.value.forEach((division) => {
+    fetchTeamStatsByDivisionId(division.id);
+  });
 });
 </script>
 <template>
@@ -62,7 +70,7 @@ onBeforeMount(() => {
     <div class="divisions-container">
       <p class="title">Divisions :</p>
       <div class="divisions">
-        <div class="division" v-for="division in divisions" :key="division.id">
+        <router-link :to="{ name:'division', params: { id:division.id}}" class="division" v-for="division in divisions" :key="division.id">
           <p class="division-title">{{ division.name }}</p>
           <div class="titles">
             <p class="rank">P</p>
@@ -73,14 +81,14 @@ onBeforeMount(() => {
             <p class="diff">+/-</p>
             <p class="points">Pts</p>
           </div>
-          <div class="team-item">
+          <div class="team-item" v-for="teamStat in teamStats" :key="teamStat.points">
             <p class="rank">1</p>
-            <p class="team-names">Oro Jackson</p>
-            <p class="victory">3</p>
-            <p class="ties">0</p>
-            <p class="defeat">0</p>
+            <p class="team-names">{{ teamStat.team_name}}</p>
+            <p class="victory">{{  teamStat.wins }}</p>
+            <p class="ties">{{ teamStat.ties }}</p>
+            <p class="defeat">{{ teamStat.defeat }}</p>
             <p class="diff">3</p>
-            <p class="points">9</p>
+            <p class="points">{{ teamStat.points }}</p>
           </div>
           <div class="team-item">
             <p class="rank">2</p>
@@ -109,7 +117,7 @@ onBeforeMount(() => {
             <p class="diff">0</p>
             <p class="points">0</p>
           </div>
-        </div>
+        </router-link>
       </div>
     </div>
   </div>

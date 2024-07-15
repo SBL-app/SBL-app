@@ -1,11 +1,33 @@
-<script setup></script>
+<script setup>
+import { useRoute, RouterLink } from "vue-router";
+import { useDivisionStore } from "@/stores/division";
+import { useTeamStatStore } from "@/stores/teamStat";
+import { storeToRefs } from "pinia";
+import { onBeforeMount } from "vue";
+
+const route = useRoute();
+const teamStatStore = useTeamStatStore();
+const { fetchTeamStatByDivisionId } = teamStatStore;
+const { teamStats } = storeToRefs(teamStatStore);
+const divisionStore = useDivisionStore();
+const { fetchDivision } = divisionStore;
+const { divisions, division } = storeToRefs(divisionStore);
+
+onBeforeMount(() => {
+  const divisionId = route.params.id;
+  fetchDivision(divisionId);
+  fetchTeamStatByDivisionId(divisionId);
+});
+
+
+</script>
 <template>
   <div class="division-focus">
     <div class="division-container">
       <div class="season-division">
-        <p class="season">Saison 2</p>
+        <router-link :to="{name:'season', params:{id:division.season_id}}" class="season">{{ division.season_name }}</router-link>
         <p>/</p>
-        <p class="division">Division 1</p>
+        <p class="division">{{ division.name }}</p>
       </div>
       <div class="division-datas">
         <div class="titles">
@@ -20,17 +42,17 @@
           <p class="difference">+/-</p>
           <p class="points">Pts</p>
         </div>
-        <div class="team">
+        <div class="team" v-for="teamStat in teamStats" :key="teamStat.id">
           <p class="rank">1</p>
-          <p class="name">team 1</p>
-          <p class="victory">3</p>
-          <p class="ties">0</p>
-          <p class="defeat">0</p>
-          <p class="forfeit">0</p>
-          <p class="v-round">12</p>
-          <p class="l-round">0</p>
-          <p class="difference">12</p>
-          <p class="points">9</p>
+          <p class="name">{{ teamStat.team_name }}</p>
+          <p class="victory">{{ teamStat.wins }}</p>
+          <p class="ties">{{ teamStat.ties }}</p>
+          <p class="defeat">{{ teamStat.losses }}</p>
+          <p class="forfeit">X</p>
+          <p class="v-round">X</p>
+          <p class="l-round">X</p>
+          <p class="difference">X</p>
+          <p class="points">{{ teamStat.points }}</p>
         </div>
       </div>
     </div>
@@ -206,7 +228,7 @@
 .points {
   width: 45px;
 }
-p {
+p, router-link {
   color: #fff;
   text-align: center;
   font-family: Inter;
