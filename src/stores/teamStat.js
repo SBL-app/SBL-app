@@ -18,10 +18,23 @@ export const useTeamStatStore = defineStore("teamStats", () => {
     teamStat.value = await response.json();
   };
 
+  const fetchTeamStatByTeamId = async (teamId) => {
+    const response = await ky.get(`${API_URL}/teamStatByTeamId/${teamId}`);
+    teamStat.value = await response.json();
+  };
+
+  const fetchTeamStatBySeasonId = async (seasonId) => {
+    const response = await ky.get(`${API_URL}/teamStatBySeasonId/${seasonId}`);
+    teamStat.value = await response.json();
+  }
+
+
   return {
     teamStats,
     teamStat,
     fetchAllTeamStats,
     fetchTeamStat,
+    fetchTeamStatByTeamId,
+    fetchTeamStatBySeasonId,
   };
 });
