@@ -48,7 +48,6 @@ onBeforeMount(() => {
           <p class="victory">{{ teamStat.wins }}</p>
           <p class="ties">{{ teamStat.ties }}</p>
           <p class="defeat">{{ teamStat.losses }}</p>
-          <p class="forfeit">X</p>
           <p class="v-round">X</p>
           <p class="l-round">X</p>
           <p class="difference">X</p>
