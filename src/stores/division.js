@@ -15,7 +15,15 @@ export const useDivisionStore = defineStore("divisions", () => {
 
   const fetchDivisionBySeason = async (seasonId) => {
     const response = await ky.get(`${API_URL}/division/season/${seasonId}`);
-    divisions.value = await response.json();
+    const divisionsData = await response.json();
+
+    const sortedDivisions = divisionsData.map((division) => {
+      let sortedDivision = { ...division };
+      sortedDivision.teams = [...division.teams].sort((a, b) => b.points - a.points);
+      return sortedDivision;
+    });
+
+    divisions.value = sortedDivisions;
   }
 
   const fetchDivision = async (id) => {

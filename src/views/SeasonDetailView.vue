@@ -4,7 +4,7 @@ import { useSeasonStore } from "@/stores/seasons";
 import { useDivisionStore } from "@/stores/division";
 import { useTeamStatStore } from "@/stores/teamStat";
 import { storeToRefs } from "pinia";
-import { onBeforeMount } from "vue";
+import { computed, onBeforeMount } from "vue";
 
 const route = useRoute();
 const seasonStore = useSeasonStore();
@@ -76,46 +76,15 @@ onBeforeMount(() => {
             <p class="rank">P</p>
             <p class="team-names">équipes</p>
             <p class="victory">V</p>
-            <p class="ties">N</p>
             <p class="defeat">D</p>
-            <p class="diff">+/-</p>
             <p class="points">Pts</p>
           </div>
-          <div class="team-item" v-for="teamStat in teamStats" :key="teamStat.points">
-            <p class="rank">1</p>
-            <p class="team-names">{{ teamStat.team_name}}</p>
-            <p class="victory">{{  teamStat.wins }}</p>
-            <p class="ties">{{ teamStat.ties }}</p>
-            <p class="defeat">{{ teamStat.defeat }}</p>
-            <p class="diff">3</p>
-            <p class="points">{{ teamStat.points }}</p>
-          </div>
-          <div class="team-item">
-            <p class="rank">2</p>
-            <p class="team-names">UBER BAGARRE !!</p>
-            <p class="victory">2</p>
-            <p class="ties">0</p>
-            <p class="defeat">1</p>
-            <p class="diff">-1</p>
-            <p class="points">6</p>
-          </div>
-          <div class="team-item">
-            <p class="rank">3</p>
-            <p class="team-names">Booyah Gang</p>
-            <p class="victory">1</p>
-            <p class="ties">0</p>
-            <p class="defeat">2</p>
-            <p class="diff">-2</p>
-            <p class="points">3</p>
-          </div>
-          <div class="team-item">
-            <p class="rank">4</p>
-            <p class="team-names">Hazard</p>
-            <p class="victory">0</p>
-            <p class="ties">0</p>
-            <p class="defeat">3</p>
-            <p class="diff">0</p>
-            <p class="points">0</p>
+          <div class="team-item" v-for="(team, index) in division.teams" :key="index">
+            <p class="rank">{{ index+1 }}</p>
+            <p class="team-names">{{ team.name }}</p>
+            <p class="victory">{{  team.wins }}</p>
+            <p class="defeat">{{ team.losses }}</p>
+            <p class="points">{{ team.points }}</p>
           </div>
         </router-link>
       </div>
