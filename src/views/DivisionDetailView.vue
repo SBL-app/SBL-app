@@ -42,8 +42,8 @@ onBeforeMount(() => {
           <p class="difference">+/-</p>
           <p class="points">Pts</p>
         </div>
-        <div class="team" v-for="teamStat in teamStats" :key="teamStat.id">
-          <p class="rank">1</p>
+        <div class="team" v-for="(teamStat, index) in teamStats" :key="teamStat.id">
+          <p class="rank">{{ index+1 }}</p>
           <p class="name">{{ teamStat.team_name }}</p>
           <p class="victory">{{ teamStat.wins }}</p>
           <p class="ties">{{ teamStat.ties }}</p>

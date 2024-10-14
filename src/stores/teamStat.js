@@ -21,6 +21,8 @@ export const useTeamStatStore = defineStore("teamStats", () => {
   const fetchTeamStatByDivisionId = async (divisionId) => {
     const response = await ky.get(`${API_URL}/teamStats/division/${divisionId}`);
     teamStats.value = await response.json();
+
+    teamStats.value.sort((a, b) => b.points - a.points);
   }
 
   const fetchTeamStatByteamIdAndDivisionId = async (teamId, divisionId) => {
