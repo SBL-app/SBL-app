@@ -10,7 +10,26 @@ const { seasons } = storeToRefs(seasonStore);
 
 onBeforeMount(() => {
   fetchAllSeasons();
+  console.log("on before mount");
+  seasons.value.forEach((season) => {
+    fetchSeasonPercentage(season.id);
+  });
 });
+
+function progressStyle(percentage) {
+  let color;
+  if (percentage < 30) {
+    color = "#ff4d4d"; // Rouge
+  } else if (percentage < 70) {
+    color = "#ffcc00"; // Jaune
+  } else {
+    color = "#76c7c0"; // Vert
+  }
+  return {
+    width: percentage + "%",
+    backgroundColor: color,
+  };
+}
 </script>
 <template>
   <div class="season-container">
@@ -23,7 +42,10 @@ onBeforeMount(() => {
         :key="season.id"
       >
         <p class="item-title">{{ season.name }}</p>
-        <div class="progressbar"></div>
+        <p class="test">{{ season.percentage }}%</p>
+        <div class="progressbar">
+          <div class="progress" :style="progressStyle(season.percentage)"></div>
+        </div>
         <p class="item-status">Terminé</p>
       </router-link>
     </div>
@@ -74,6 +96,15 @@ p {
   width: 160px;
   height: 9px;
   border-radius: 99px;
-  background: #04d200;
+  background: #e0e0e0;
+  position: relative;
+}
+
+.progress {
+  height: 100%;
+  border-radius: 99px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 </style>
