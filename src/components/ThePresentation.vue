@@ -1,4 +1,16 @@
-<script setup></script>
+<script setup>
+import { onBeforeMount } from 'vue';
+import { storeToRefs } from "pinia";
+import { useSeasonStore } from "@/stores/seasons";
+
+const seasonStore = useSeasonStore();
+const { fetchAllSeasons } = seasonStore;
+const { seasons } = storeToRefs(seasonStore);
+
+onBeforeMount(() => {
+  fetchAllSeasons();
+});
+</script>
 <template>
   <div class="presentation-container">
     <p class="title">Qui sommes-nous ?</p>
@@ -6,8 +18,8 @@
       Créer en 2022, la Splatoon Baguette League se charge d’organiser des
       ligues sur Splatoon le plus souvent possible afin de soutenir la scène
       compétitive française présente sur le jeu. Depuis sa création la SBL à
-      assurer 2 saisons ainsi que différents tournois gravitant autour de ces
-      saisons et prépare actuellement sa 3ème saison.
+      assurer {{ seasons.length-1 }} saisons ainsi que différents tournois gravitant autour de ces
+      saisons et prépare actuellement sa {{ seasons.length }}ème saison.
     </p>
   </div>
 </template>
