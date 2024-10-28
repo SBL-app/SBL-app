@@ -19,7 +19,7 @@ onBeforeMount(() => {
       ligues sur Splatoon le plus souvent possible afin de soutenir la scène
       compétitive française présente sur le jeu. Depuis sa création la SBL à
       assurer {{ seasons.length-1 }} saisons ainsi que différents tournois gravitant autour de ces
-      saisons et prépare actuellement sa {{ seasons.length }}ème saison.
+      saisons et prépare actuellement sa {{ seasons.length }} ème saison.
     </p>
   </div>
 </template>
