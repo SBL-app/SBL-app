@@ -11,9 +11,6 @@ const { seasons } = storeToRefs(seasonStore);
 onBeforeMount(() => {
   fetchAllSeasons();
   console.log("on before mount");
-  seasons.value.forEach((season) => {
-    fetchSeasonPercentage(season.id);
-  });
 });
 
 function progressStyle(percentage) {
