@@ -16,15 +16,14 @@ const { fetchDivisionBySeason } = divisionStore;
 const { divisions } = storeToRefs(divisionStore);
 
 const teamStatStore = useTeamStatStore();
-const { fetchTeamStatsByDivisionId } = teamStatStore;
-const { teamStats } = storeToRefs(teamStatStore);
+const { fetchTeamStatByDivisionId } = teamStatStore;
 
 onBeforeMount(() => {
   const seasonId = route.params.id;
   fetchSeason(seasonId);
   fetchDivisionBySeason(seasonId);
   divisions.value.forEach((division) => {
-    fetchTeamStatsByDivisionId(division.id);
+    fetchTeamStatByDivisionId(division.id);
   });
 });
 </script>
