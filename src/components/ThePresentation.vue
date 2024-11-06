@@ -9,6 +9,7 @@ const { seasons } = storeToRefs(seasonStore);
 
 onBeforeMount(() => {
   fetchAllSeasons();
+  console.log("the presentation");
 });
 </script>
 <template>
