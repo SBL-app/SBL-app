@@ -1,14 +1,56 @@
-<script setup>
+<script>
+import { computed, onBeforeMount, watch } from "vue";
+import { useSeasonStore } from "@/stores/seasons";
 import { RouterLink } from "vue-router";
+import { storeToRefs } from "pinia";
+
+export default {
+  setup() {
+    const seasonStore = useSeasonStore();
+    const { fetchAllSeasons } = seasonStore;
+    const { seasons } = storeToRefs(seasonStore);
+
+    const lastSeason = computed(() => {
+      return seasons.value.length > 0 ? seasons.value[seasons.value.length - 1] : null;
+    });
+
+    onBeforeMount(() => {
+      fetchAllSeasons();
+      console.log("in coming events");
+    });
+
+    watch(seasons, (newSeasons) => {
+      if (newSeasons.length > 0) {
+        lastSeason.value = newSeasons[newSeasons.length - 1];
+      } else {
+        lastSeason.value = null;
+      }
+    });
+
+    return {
+      seasons,
+      lastSeason
+    };
+  }
+};
 </script>
 <template>
   <div class="event-container">
     <p class="title">Prochain évènements</p>
-    <router-link to="/event/3" class="event">
-      <p class="name">Saison 3</p>
-      <p class="teams">13 équipes</p>
+    <RouterLink 
+    v-if="lastSeason" 
+    :to="{ name: 'event', params: { id: lastSeason.id} }" 
+    class="event">
+      <p class="name">
+       {{ lastSeason.name }}
+      </p>
+      <p class="teams">
+        {{ seasons.length }} équipes
+      </p>
       <div class="dates">
-        <p class="startDate">01/01</p>
+        <p class="startDate">
+          {{ lastSeason.start_date }}
+        </p>
         <div class="arrow_forward">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -36,10 +78,17 @@ import { RouterLink } from "vue-router";
             </g>
           </svg>
         </div>
-        <p class="endDate">20/01</p>
+        <p class="endDate">
+          {{ lastSeason.end_date }}
+        </p>
       </div>
-      <p class="state">étape : terminé</p>
-    </router-link>
+      <p class="state">
+        {{ lastSeason.percentage === 100 ? 'terminé' : 'en cours' }}
+      </p>
+    </RouterLink>
+    <div v-else>
+      <p>Aucun évènement disponible</p>
+    </div>
   </div>
 </template>
 <style scoped>
