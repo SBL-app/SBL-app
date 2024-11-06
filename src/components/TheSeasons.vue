@@ -10,7 +10,7 @@ const { seasons } = storeToRefs(seasonStore);
 
 onBeforeMount(() => {
   fetchAllSeasons();
-  console.log("on before mount");
+  console.log("the seasons");
 });
 
 function progressStyle(percentage) {
@@ -43,7 +43,9 @@ function progressStyle(percentage) {
         <div class="progressbar">
           <div class="progress" :style="progressStyle(season.percentage)"></div>
         </div>
-        <p class="item-status">Terminé</p>
+        <p class="item-status">
+          {{ season.percentage === 100 ? 'terminé' : 'en cours' }}
+        </p>
       </router-link>
     </div>
   </div>
