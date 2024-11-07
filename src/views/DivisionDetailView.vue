@@ -3,6 +3,7 @@ import { useRoute, RouterLink } from "vue-router";
 import { useDivisionStore } from "@/stores/division";
 import { useTeamStatStore } from "@/stores/teamStat";
 import { useGameStore } from "@/stores/game";
+import { useTeamStore } from "@/stores/team";
 import { storeToRefs } from "pinia";
 import { onBeforeMount } from "vue";
 
@@ -10,26 +11,36 @@ const route = useRoute();
 const teamStatStore = useTeamStatStore();
 const { fetchTeamStatByDivisionId } = teamStatStore;
 const { teamStats } = storeToRefs(teamStatStore);
+
 const divisionStore = useDivisionStore();
 const { fetchDivision } = divisionStore;
 const { division } = storeToRefs(divisionStore);
+
 const gameStore = useGameStore();
 const { fetchGamesByDivisionId } = gameStore;
 const { games } = storeToRefs(gameStore);
+
+const teamStore = useTeamStore();
+const { fetchTeamsByDivision } = teamStore;
+const { teams } = storeToRefs(teamStore);
 
 onBeforeMount(() => {
   const divisionId = route.params.id;
   fetchDivision(divisionId);
   fetchTeamStatByDivisionId(divisionId);
   fetchGamesByDivisionId(divisionId);
-  setDivisionDuration();
+  fetchTeamsByDivision(divisionId);
 });
 </script>
 <template>
   <div class="division-focus">
     <div class="division-container">
       <div class="season-division">
-        <router-link :to="{name:'season', params:{id:division.season_id}}" class="season">{{ division.season_name }}</router-link>
+        <router-link
+          :to="{ name: 'season', params: { id: division.season_id } }"
+          class="season"
+          >{{ division.season_name }}</router-link
+        >
         <p>/</p>
         <p class="division">{{ division.name }}</p>
       </div>
@@ -46,8 +57,12 @@ onBeforeMount(() => {
           <p class="difference">+/-</p>
           <p class="points">Pts</p>
         </div>
-        <div class="team" v-for="(teamStat, index) in teamStats" :key="teamStat.id">
-          <p class="rank">{{ index+1 }}</p>
+        <div
+          class="team"
+          v-for="(teamStat, index) in teamStats"
+          :key="teamStat.id"
+        >
+          <p class="rank">{{ index + 1 }}</p>
           <p class="name">{{ teamStat.team_name }}</p>
           <p class="victory">{{ teamStat.wins }}</p>
           <p class="ties">{{ teamStat.ties }}</p>
@@ -55,7 +70,9 @@ onBeforeMount(() => {
           <p class="forfeit">{{ teamStat.forfeits }}</p>
           <p class="v-round">{{ teamStat.nbWinRound }}</p>
           <p class="l-round">{{ teamStat.nbLooseRound }}</p>
-          <p class="difference">{{ teamStat.nbWinRound - teamStat.nbLooseRound }}</p>
+          <p class="difference">
+            {{ teamStat.nbWinRound - teamStat.nbLooseRound }}
+          </p>
           <p class="points">{{ teamStat.points }}</p>
         </div>
       </div>
@@ -80,51 +97,16 @@ onBeforeMount(() => {
     <div class="team-container">
       <p class="title">équipes</p>
       <div class="teams">
-        <div class="team-item">
-          <p class="team-title">team 1</p>
+        <div class="team-item" v-for="team in teams" :key="team.id">
+          <p class="team-title">{{ team.name }}</p>
           <div class="member-container">
             <p class="members-title">membres</p>
-            <div class="membres">
-              <p class="member">member 1</p>
-              <p class="member">member 2</p>
-              <p class="member">member 3</p>
-              <p class="member">member 4</p>
-            </div>
-          </div>
-        </div>
-        <div class="team-item">
-          <p class="team-title">team 1</p>
-          <div class="member-container">
-            <p class="members-title">membres</p>
-            <div class="membres">
-              <p class="member">member 1</p>
-              <p class="member">member 2</p>
-              <p class="member">member 3</p>
-              <p class="member">member 4</p>
-            </div>
-          </div>
-        </div>
-        <div class="team-item">
-          <p class="team-title">team 1</p>
-          <div class="member-container">
-            <p class="members-title">membres</p>
-            <div class="membres">
-              <p class="member">member 1</p>
-              <p class="member">member 2</p>
-              <p class="member">member 3</p>
-              <p class="member">member 4</p>
-            </div>
-          </div>
-        </div>
-        <div class="team-item">
-          <p class="team-title">team 1</p>
-          <div class="member-container">
-            <p class="members-title">membres</p>
-            <div class="membres">
-              <p class="member">member 1</p>
-              <p class="member">member 2</p>
-              <p class="member">member 3</p>
-              <p class="member">member 4</p>
+            <div
+              class="members"
+              v-for="member in team.members"
+              :key="member.id"
+            >
+              <p class="member">{{ member.name }}</p>
             </div>
           </div>
         </div>
@@ -219,7 +201,8 @@ onBeforeMount(() => {
 .points {
   width: 45px;
 }
-p, router-link {
+p,
+router-link {
   color: #fff;
   text-align: center;
   font-family: Inter;

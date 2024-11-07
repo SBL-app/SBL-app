@@ -18,10 +18,16 @@ export const useTeamStore = defineStore("teams", () => {
     team.value = await response.json();
   };
 
+  const fetchTeamsByDivision = async (divisionId) => {
+    const response = await ky.get(`${API_URL}/division/${divisionId}/teams`);
+    teams.value = await response.json();
+  };
+
   return {
     teams,
     team,
     fetchAllTeams,
     fetchTeam,
+    fetchTeamsByDivision,
   };
 });
