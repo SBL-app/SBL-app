@@ -24,15 +24,6 @@ onBeforeMount(() => {
   fetchGamesByDivisionId(divisionId);
   setDivisionDuration();
 });
-
-function setDivisionDuration() {
-  const divisionDuration = teamStats.length - 1;
-  return divisionDuration;
-}
-
-function filterGamesByWeek(week) {
-  return games.filter((game) => game.week === week);
-}
 </script>
 <template>
   <div class="division-focus">
