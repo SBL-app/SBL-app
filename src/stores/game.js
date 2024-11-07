@@ -18,10 +18,16 @@ export const useGameStore = defineStore("games", () => {
     game.value = await response.json();
   };
 
+  const fetchGamesByDivisionId = async (id) => {
+    const response = await ky.get(`${API_URL}/division/${id}/games`);
+    games.value = await response.json();
+  }
+
   return {
     games,
     game,
     fetchAllGames,
     fetchGame,
+    fetchGamesByDivisionId,
   };
 });

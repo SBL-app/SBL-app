@@ -2,6 +2,7 @@
 import { useRoute, RouterLink } from "vue-router";
 import { useDivisionStore } from "@/stores/division";
 import { useTeamStatStore } from "@/stores/teamStat";
+import { useGameStore } from "@/stores/game";
 import { storeToRefs } from "pinia";
 import { onBeforeMount } from "vue";
 
@@ -11,15 +12,27 @@ const { fetchTeamStatByDivisionId } = teamStatStore;
 const { teamStats } = storeToRefs(teamStatStore);
 const divisionStore = useDivisionStore();
 const { fetchDivision } = divisionStore;
-const { divisions, division } = storeToRefs(divisionStore);
+const { division } = storeToRefs(divisionStore);
+const gameStore = useGameStore();
+const { fetchGamesByDivisionId } = gameStore;
+const { games } = storeToRefs(gameStore);
 
 onBeforeMount(() => {
   const divisionId = route.params.id;
   fetchDivision(divisionId);
   fetchTeamStatByDivisionId(divisionId);
+  fetchGamesByDivisionId(divisionId);
+  setDivisionDuration();
 });
 
+function setDivisionDuration() {
+  const divisionDuration = teamStats.length - 1;
+  return divisionDuration;
+}
 
+function filterGamesByWeek(week) {
+  return games.filter((game) => game.week === week);
+}
 </script>
 <template>
   <div class="division-focus">
@@ -56,35 +69,22 @@ onBeforeMount(() => {
         </div>
       </div>
     </div>
-    <div class="planning">
+    <div class="planning" v-if="games.length > 0">
       <p class="title">Planning</p>
-      <div class="week">
-        <p class="week-name">Semaine 1</p>
-        <div class="match">
-          <p class="team-name">team 1</p>
-          <p class="score">4</p>
+      <div class="week" v-for="week in games" :key="week.week">
+        <p class="week-name">Semaine {{ week.week }}</p>
+        <div class="match" v-for="game in week.games" :key="game.id">
+          <p class="team-name">{{ game.team1 }}</p>
+          <p class="score">{{ game.score1 }}</p>
           <p class="vs">VS</p>
-          <p class="score">0</p>
-          <p class="team-name">team 2</p>
-        </div>
-        <div class="match">
-          <p class="team-name">team 1</p>
-          <p class="score">4</p>
-          <p class="vs">VS</p>
-          <p class="score">0</p>
-          <p class="team-name">team 2</p>
+          <p class="score">{{ game.score2 }}</p>
+          <p class="team-name">{{ game.team2 }}</p>
         </div>
       </div>
-      <div class="week">
-        <p class="week-name">Semaine 1</p>
-        <div class="match">
-          <p class="team-name">team 1</p>
-          <p class="score">4</p>
-          <p class="vs">VS</p>
-          <p class="score">0</p>
-          <p class="team-name">team 2</p>
-        </div>
-      </div>
+    </div>
+    <div class="planning" v-else>
+      <p class="title">Planning</p>
+      <p>Aucun match prévu</p>
     </div>
     <div class="team-container">
       <p class="title">équipes</p>
