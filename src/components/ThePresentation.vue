@@ -46,7 +46,6 @@ onBeforeMount(() => {
 p {
   color: #fff;
   text-align: justify;
-  font-family: Lexend;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

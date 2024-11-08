@@ -58,7 +58,6 @@ import IncomingEvents from "../components/IncomingEvents.vue";
 p {
   color: #fff;
   text-align: center;
-  font-family: Inter;
   font-size: 24px;
   font-style: normal;
   font-weight: 400;

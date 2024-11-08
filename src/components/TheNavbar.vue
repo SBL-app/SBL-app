@@ -88,7 +88,6 @@ import { RouterLink } from "vue-router";
 a,
 p {
   color: #fff;
-  font-family: Lexend;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;

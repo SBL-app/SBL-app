@@ -96,7 +96,7 @@ onBeforeMount(() => {
     </div>
     <div class="team-container">
       <p class="title">équipes</p>
-      <div class="teams">
+      <div class="teams" v-if="teams.length > 0">
         <div class="team-item" v-for="team in teams" :key="team.id">
           <p class="team-title">{{ team.name }}</p>
           <div class="member-container">
@@ -110,6 +110,9 @@ onBeforeMount(() => {
             </div>
           </div>
         </div>
+      </div>
+      <div class="teams" v-else>
+        <p>aucune équipe</p>
       </div>
     </div>
   </div>
@@ -205,7 +208,6 @@ p,
 router-link {
   color: #fff;
   text-align: center;
-  font-family: Inter;
   font-size: 24px;
   font-style: normal;
   font-weight: 400;

@@ -37,7 +37,6 @@
 }
 .teams p {
   text-align: center;
-  font-family: Inter;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

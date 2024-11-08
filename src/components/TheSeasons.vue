@@ -84,7 +84,6 @@ function progressStyle(percentage) {
 p {
   color: #fff;
   text-align: center;
-  font-family: Lexend;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
