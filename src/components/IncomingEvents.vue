@@ -1,7 +1,6 @@
 <script>
 import { computed, onBeforeMount, watch } from "vue";
 import { useSeasonStore } from "@/stores/seasons";
-import { RouterLink } from "vue-router";
 import { storeToRefs } from "pinia";
 
 export default {
