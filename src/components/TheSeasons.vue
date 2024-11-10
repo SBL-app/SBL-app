@@ -31,7 +31,7 @@ function progressStyle(percentage) {
 <template>
   <div class="season-container">
     <p class="title">Saisons :</p>
-    <div class="seasons">
+    <div class="seasons" v-if="seasons.length > 0">
       <router-link
         :to="{ name: 'season', params: { id: season.id } }"
         class="season-item"
@@ -48,6 +48,7 @@ function progressStyle(percentage) {
         </p>
       </router-link>
     </div>
+    <p v-else>Aucune saison en cours</p>
   </div>
 </template>
 <style scoped>
