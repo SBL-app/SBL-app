@@ -15,7 +15,7 @@ export default {
 
     onBeforeMount(() => {
       fetchAllSeasons();
-      console.log("in coming events");
+      console.log("incoming events");
     });
 
     watch(seasons, (newSeasons) => {
