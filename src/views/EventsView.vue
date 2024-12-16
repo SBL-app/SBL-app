@@ -26,7 +26,7 @@ onBeforeMount(() => {
       <RouterLink
         v-for="season in oldSeasons"
         :key="season.id"
-        :to="{ name: 'event', params: { id: season.id } }"
+        :to="{ name: 'season', params: { id: season.id } }"
         class="event-item"
       >
         <p class="name">
