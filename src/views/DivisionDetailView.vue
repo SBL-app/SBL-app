@@ -136,12 +136,11 @@ onBeforeMount(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
   align-self: stretch;
 }
 .team-item {
   display: flex;
-  padding: 38px 31px;
+  padding: 30px;
   flex-direction: column;
   align-items: center;
   gap: 25px;
@@ -153,7 +152,7 @@ onBeforeMount(() => {
   justify-content: center;
   align-items: center;
   align-content: center;
-  gap: 84px;
+  gap: 30px;
   align-self: stretch;
   flex-wrap: wrap;
 }
@@ -180,7 +179,7 @@ onBeforeMount(() => {
   padding: 19px 25px;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   border-radius: 20px;
   background: var(--embed-color-1, #5c47e0);
 }
@@ -249,7 +248,7 @@ router-link {
 }
 .team-container {
   display: flex;
-  padding: 20px 50px;
+  padding: 20px 30px;
   flex-direction: column;
   align-items: center;
   gap: 30px;
