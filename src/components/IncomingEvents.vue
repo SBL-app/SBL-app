@@ -125,9 +125,4 @@ p {
   align-items: center;
   gap: 8px;
 }
-
-.arrow_forward {
-  width: 16px;
-  height: 16px;
-}
 </style>
