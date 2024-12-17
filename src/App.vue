@@ -1,11 +1,19 @@
 <script setup>
 import TheNavbar from "./components/TheNavbar.vue";
-import { RouterLink } from "vue-router";
 </script>
 
 <template>
-  <TheNavbar />
+  <div class="TheNavbar">
+    <TheNavbar />
+  </div>
   <router-view />
 </template>
 
-<style scoped></style>
+<style scoped>
+.TheNavbar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+</style>
