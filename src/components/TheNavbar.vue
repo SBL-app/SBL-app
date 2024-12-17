@@ -17,10 +17,10 @@ import { RouterLink } from "vue-router";
       <RouterLink to="events">évènements</RouterLink>
     </div>
     <div class="socials">
-      <a href="link-to-discord-server">
+      <a href="https://discord.gg/SJgnEYQwcV"> <!-- TODO : check the link -->
         <div class="discord-logo"></div>
       </a>
-      <a href="link-to-x-profile">
+      <a href="https://x.com/sbaguetteleague">
         <div class="x-logo"></div>
       </a>
     </div>
