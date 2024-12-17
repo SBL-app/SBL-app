@@ -8,4 +8,8 @@ import ThePresentation from "../components/ThePresentation.vue";
   <IncomingEvents />
   <TheSeasons />
   <ThePresentation />
+  <IncomingEvents />
+  <TheSeasons />
+  <ThePresentation />
 </template>
+<style scoped></style>
