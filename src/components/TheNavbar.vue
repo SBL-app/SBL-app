@@ -3,7 +3,7 @@ import { RouterLink } from "vue-router";
 </script>
 <template>
   <div class="nav">
-    <RouterLink to="/home">
+    <RouterLink to="home">
       <div class="logo">
         <div class="logo-sbl"></div>
         <div class="logo-text">
@@ -12,8 +12,8 @@ import { RouterLink } from "vue-router";
       </div>
     </RouterLink>
     <div class="links">
-      <RouterLink to="/home">Home</RouterLink>
-      <RouterLink to="/seasons">saisons</RouterLink>
+      <RouterLink to="home">Home</RouterLink>
+      <RouterLink to="seasons">saisons</RouterLink>
       <RouterLink to="events">évènements</RouterLink>
     </div>
     <div class="socials">
