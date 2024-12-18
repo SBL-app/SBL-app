@@ -12,9 +12,9 @@ import { RouterLink } from "vue-router";
       </div>
     </RouterLink>
     <div class="links">
-      <RouterLink to="home">Home</RouterLink>
-      <RouterLink to="seasons">saisons</RouterLink>
-      <RouterLink to="events">évènements</RouterLink>
+      <RouterLink to="/home">Home</RouterLink>
+      <RouterLink to="/seasons">saisons</RouterLink>
+      <RouterLink to="/events">évènements</RouterLink>
     </div>
     <div class="socials">
       <a href="https://discord.gg/SJgnEYQwcV"> <!-- TODO : check the link -->
