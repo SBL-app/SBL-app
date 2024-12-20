@@ -1,20 +1,29 @@
-<script setup></script>
+<script setup>
+import { useRoute } from "vue-router";
+import { useSeasonStore } from "@/stores/seasons";
+import { storeToRefs } from "pinia";
+import { onBeforeMount } from "vue";
+
+const route = useRoute();
+
+const seasonStore = useSeasonStore();
+const { fetchTeamsBySeason } = seasonStore;
+const { season } = storeToRefs(seasonStore);
+
+onBeforeMount(async () => {
+  const seasonId = route.params.id;
+  fetchTeamsBySeason(seasonId);
+});
+</script>
 <template>
   <div class="event-focus">
-    <p class="title">Saison X :</p>
+    <p class="title">{{ season.name }}</p>
     <div class="registered-teams">
       <p class="registered-title">équipes inscrites :</p>
       <div class="teams">
-        <p class="team-name">team 1</p>
-        <p class="team-name">team 2</p>
-        <p class="team-name">team 3</p>
-        <p class="team-name">team 4</p>
-        <p class="team-name">team 5</p>
-        <p class="team-name">team 6</p>
-        <p class="team-name">team 7</p>
-        <p class="team-name">team 8</p>
-        <p class="team-name">team 9</p>
-        <p class="team-name">team 10</p>
+        <p class="team-name" v-for="team in season.teams" :key="team.id">
+          {{ team.name }}
+        </p>
       </div>
     </div>
     <div class="register-button">
