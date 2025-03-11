@@ -26,30 +26,20 @@ onBeforeMount(async () => {
         </p>
       </div>
     </div>
-    <div class="register-button">
-      <p>S'inscrire</p>
-    </div>
   </div>
 </template>
 <style scoped>
-.register-button {
-  display: flex;
-  width: 268px;
-  height: 42px;
-  padding: 10px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  border-radius: 20px;
-  background: var(--embed-color-1, #5c47e0);
-}
-.teams p {
+p {
   text-align: center;
-  font-size: 16px;
+  color: #fff;
+  font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  text-decoration: none;
+}
+.registered-title, .title {
+  text-decoration: underline;
 }
 .team-name {
   width: 100px;
