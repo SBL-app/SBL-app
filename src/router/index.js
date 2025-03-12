@@ -7,6 +7,7 @@ import EventDetailView from "../views/EventDetailView.vue";
 import DivisionDetailView from "../views/DivisionDetailView.vue";
 import TeamsView from "@/views/TeamsView.vue";
 import TeamDetailView from "@/views/TeamDetailView.vue";
+import PlayerDetailView from "@/views/PlayerDetailView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,6 +55,11 @@ const router = createRouter({
       path: "/team/:id",
       name: "team",
       component: TeamDetailView,
+    },
+    {
+      path: "/player/:id",
+      name: "player",
+      component: PlayerDetailView,
     }
   ],
 });

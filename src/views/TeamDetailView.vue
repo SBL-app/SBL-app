@@ -40,6 +40,7 @@ onBeforeMount(() => {
           class="player"
           v-for="player in players"
           :key="player.id"
+          :to="{ name: 'player', params: { id: player.id } }"
         >
           <p>{{ player.name }}</p>
         </RouterLink>
