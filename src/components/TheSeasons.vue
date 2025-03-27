@@ -44,7 +44,7 @@ function progressStyle(percentage) {
           <div class="progress" :style="progressStyle(season.percentage)"></div>
         </div>
         <p class="item-status">
-          {{ season.percentage === 100 ? 'terminé' : 'en cours' }}
+          {{ Number(season.percentage) === 100 ? 'terminé' : 'en cours' }}
         </p>
       </router-link>
     </div>
