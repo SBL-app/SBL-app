@@ -14,6 +14,7 @@ onBeforeMount(() => {
   const playerId = route.params.id;
   fetchPlayer(playerId);
   console.log("player detail view");
+  console.log(player);
 });
 </script>
 <template>
@@ -22,7 +23,7 @@ onBeforeMount(() => {
       <div class="player">
         <p class="player-name">{{ player.name }}</p>
         <router-link
-          :to="{ name: 'team', params: { id: player.team_id } }"
+          :to="{ name: 'team', params: { id: player.team } }"
           class="team"
           >{{ player.team_name }}</router-link
         >
