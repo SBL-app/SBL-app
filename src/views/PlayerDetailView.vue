@@ -14,7 +14,6 @@ onBeforeMount(() => {
   const playerId = route.params.id;
   fetchPlayer(playerId);
   console.log("player detail view");
-  console.log(player);
 });
 </script>
 <template>
