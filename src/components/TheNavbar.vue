@@ -3,7 +3,7 @@ import { RouterLink } from "vue-router";
 </script>
 <template>
   <div class="nav">
-    <RouterLink to="home">
+    <RouterLink to="/home">
       <div class="logo">
         <div class="logo-sbl"></div>
         <div class="logo-text">
@@ -15,6 +15,7 @@ import { RouterLink } from "vue-router";
       <RouterLink to="/home">Home</RouterLink>
       <RouterLink to="/seasons">saisons</RouterLink>
       <RouterLink to="/events">évènements</RouterLink>
+      <RouterLink to="/teams">équipes</RouterLink>
     </div>
     <div class="socials">
       <a href="https://discord.gg/SJgnEYQwcV"> <!-- TODO : check the link -->
