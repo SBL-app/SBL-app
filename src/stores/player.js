@@ -13,6 +13,11 @@ export const usePlayerStore = defineStore("players", () => {
     players.value = await response.json();
   };
 
+  const fetchPlayersByTeam = async (teamId) => {
+    const response = await ky.get(`${API_URL}/players/${teamId}`);
+    players.value = await response.json();
+  }
+
   const fetchPlayer = async (id) => {
     const response = await ky.get(`${API_URL}/player/${id}`);
     player.value = await response.json();
@@ -22,6 +27,7 @@ export const usePlayerStore = defineStore("players", () => {
     players,
     player,
     fetchAllPlayers,
+    fetchPlayersByTeam,
     fetchPlayer,
   };
 });
