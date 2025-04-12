@@ -14,7 +14,7 @@ export const useTeamStatStore = defineStore("teamStats", () => {
   };
 
   const fetchTeamStatByTeamId = async (teamId) => {
-    const response = await ky.get(`${API_URL}/teamStat/${teamId}`);
+    const response = await ky.get(`${API_URL}/teamStats/${teamId}`);
     teamStats.value = await response.json();
   };
 
