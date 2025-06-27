@@ -12,5 +12,15 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        // Configuration pour optimiser les chunks
+        manualChunks: {
+          vendor: ['vue', 'vue-router', 'pinia']
+        }
+      }
+    }
   }
 })
