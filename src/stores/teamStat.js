@@ -1,8 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import ky from "ky";
-
-const API_URL = "http://localhost:8000";
+import { API_URL } from "../../API_URL";
 
 export const useTeamStatStore = defineStore("teamStats", () => {
   const teamStats = ref([]);
@@ -14,7 +13,7 @@ export const useTeamStatStore = defineStore("teamStats", () => {
   };
 
   const fetchTeamStatByTeamId = async (teamId) => {
-    const response = await ky.get(`${API_URL}/teamStat/${teamId}`);
+    const response = await ky.get(`${API_URL}/teamStats/${teamId}`);
     teamStats.value = await response.json();
   };
 

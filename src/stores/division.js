@@ -1,8 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import ky from "ky";
-
-const API_URL = "http://localhost:8000";
+import { API_URL } from "../../API_URL";
 
 export const useDivisionStore = defineStore("divisions", () => {
   const divisions = ref([]);
