@@ -60,6 +60,10 @@ const router = createRouter({
       path: "/player/:id",
       name: "player",
       component: PlayerDetailView,
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      redirect: "/home",
     }
   ],
 });
