@@ -18,13 +18,14 @@ const { divisions } = storeToRefs(divisionStore);
 const teamStatStore = useTeamStatStore();
 const { fetchTeamStatByDivisionId } = teamStatStore;
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   const seasonId = route.params.id;
-  fetchSeason(seasonId);
-  fetchDivisionBySeason(seasonId);
-  divisions.value.forEach((division) => {
-    fetchTeamStatByDivisionId(division.id);
-  });
+  await fetchSeason(seasonId);
+  await fetchDivisionBySeason(seasonId);
+  // Attendre que les divisions soient chargées avant de récupérer les stats
+  for (const division of divisions.value) {
+    await fetchTeamStatByDivisionId(division.id);
+  }
 });
 </script>
 <template>

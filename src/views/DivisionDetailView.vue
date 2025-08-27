@@ -1,48 +1,43 @@
 <script setup>
 import { useRoute, RouterLink } from "vue-router";
 import { useDivisionStore } from "@/stores/division";
-import { useTeamStatStore } from "@/stores/teamStat";
-import { useGameStore } from "@/stores/game";
-import { useTeamStore } from "@/stores/team";
 import { storeToRefs } from "pinia";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, ref } from "vue";
 
 const route = useRoute();
-const teamStatStore = useTeamStatStore();
-const { fetchTeamStatByDivisionId } = teamStatStore;
-const { teamStats } = storeToRefs(teamStatStore);
-
 const divisionStore = useDivisionStore();
-const { fetchDivision } = divisionStore;
-const { division } = storeToRefs(divisionStore);
+const { fetchDivisionDetails } = divisionStore;
 
-const gameStore = useGameStore();
-const { fetchGamesByDivisionId } = gameStore;
-const { games } = storeToRefs(gameStore);
+// Variables réactives pour stocker les données
+const divisionData = ref(null);
+const ranking = ref([]);
+const teams = ref([]);
+const games = ref([]);
 
-const teamStore = useTeamStore();
-const { fetchTeamsByDivision } = teamStore;
-const { teams } = storeToRefs(teamStore);
-
-onBeforeMount(() => {
+onBeforeMount(async () => {
   const divisionId = route.params.id;
-  fetchDivision(divisionId);
-  fetchTeamStatByDivisionId(divisionId);
-  fetchGamesByDivisionId(divisionId);
-  fetchTeamsByDivision(divisionId);
+  try {
+    const data = await fetchDivisionDetails(divisionId);
+    divisionData.value = data.division;
+    ranking.value = data.ranking;
+    teams.value = data.teams;
+    games.value = data.games;
+  } catch (error) {
+    console.error('Erreur lors du chargement des détails de la division:', error);
+  }
 });
 </script>
 <template>
-  <div class="division-focus">
+  <div class="division-focus" v-if="divisionData">
     <div class="division-container">
       <div class="season-division">
         <router-link
-          :to="{ name: 'season', params: { id: division.season_id } }"
+          :to="{ name: 'season', params: { id: divisionData.season_id } }"
           class="season"
-          >{{ division.season_name }}</router-link
+          >{{ divisionData.season_name }}</router-link
         >
         <p>/</p>
-        <p class="division">{{ division.name }}</p>
+        <p class="division">{{ divisionData.name }}</p>
       </div>
       <div class="division-datas">
         <div class="titles">
@@ -59,21 +54,21 @@ onBeforeMount(() => {
         </div>
         <div
           class="team"
-          v-for="(teamStat, index) in teamStats"
-          :key="teamStat.id"
+          v-for="teamRanking in ranking"
+          :key="teamRanking.team_id"
         >
-          <p class="rank">{{ index + 1 }}</p>
-          <p class="name">{{ teamStat.team_name }}</p>
-          <p class="victory">{{ teamStat.wins }}</p>
-          <p class="ties">{{ teamStat.ties }}</p>
-          <p class="defeat">{{ teamStat.losses }}</p>
-          <p class="forfeit">{{ teamStat.forfeits }}</p>
-          <p class="v-round">{{ teamStat.nbWinRound }}</p>
-          <p class="l-round">{{ teamStat.nbLooseRound }}</p>
+          <p class="rank">{{ teamRanking.position }}</p>
+          <p class="name">{{ teamRanking.team_name }}</p>
+          <p class="victory">{{ teamRanking.stats.wins }}</p>
+          <p class="ties">{{ teamRanking.stats.ties }}</p>
+          <p class="defeat">{{ teamRanking.stats.losses }}</p>
+          <p class="forfeit">0</p>
+          <p class="v-round">{{ teamRanking.stats.winRounds }}</p>
+          <p class="l-round">{{ teamRanking.stats.looseRounds }}</p>
           <p class="difference">
-            {{ teamStat.nbWinRound - teamStat.nbLooseRound }}
+            {{ teamRanking.stats.winRounds - teamRanking.stats.looseRounds }}
           </p>
-          <p class="points">{{ teamStat.points }}</p>
+          <p class="points">{{ teamRanking.stats.points }}</p>
         </div>
       </div>
     </div>
@@ -82,11 +77,19 @@ onBeforeMount(() => {
       <div class="week" v-for="week in games" :key="week.week">
         <p class="week-name">Semaine {{ week.week }}</p>
         <div class="match" v-for="game in week.games" :key="game.id">
-          <p class="team-name">{{ game.team1 }}</p>
-          <p class="score">{{ game.score1 }}</p>
-          <p class="vs">VS</p>
-          <p class="score">{{ game.score2 }}</p>
-          <p class="team-name">{{ game.team2 }}</p>
+          <div class="match-info">
+            <p class="match-date">{{ game.date }}</p>
+            <div class="match-teams">
+              <p class="team-name">{{ game.team1 }}</p>
+              <div class="match-score">
+                <p class="score">{{ game.score1 }}</p>
+                <p class="vs">VS</p>
+                <p class="score">{{ game.score2 }}</p>
+              </div>
+              <p class="team-name">{{ game.team2 }}</p>
+            </div>
+            <p class="match-status" :class="game.status">{{ game.status }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -99,6 +102,7 @@ onBeforeMount(() => {
       <div class="teams" v-if="teams.length > 0">
         <div class="team-item" v-for="team in teams" :key="team.id">
           <p class="team-title">{{ team.name }}</p>
+          <p class="captain" v-if="team.captain">Capitaine: {{ team.captain }}</p>
           <div class="member-container">
             <p class="members-title">membres</p>
             <div
@@ -107,6 +111,7 @@ onBeforeMount(() => {
               :key="member.id"
             >
               <p class="member">{{ member.name }}</p>
+              <p class="discord" v-if="member.discord">{{ member.discord }}</p>
             </div>
           </div>
         </div>
@@ -123,6 +128,16 @@ onBeforeMount(() => {
 }
 .team-title {
   font-size: 30px;
+}
+.captain {
+  font-size: 18px;
+  color: #ffd700;
+  font-weight: bold;
+}
+.discord {
+  font-size: 14px;
+  color: #99aab5;
+  font-style: italic;
 }
 .members {
   display: flex;
@@ -164,6 +179,52 @@ onBeforeMount(() => {
   justify-content: center;
   align-items: center;
   gap: 16px;
+}
+.match-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+.match-date {
+  font-size: 16px;
+  color: #cccccc;
+  margin: 0;
+}
+.match-teams {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+}
+.match-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.match-status {
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.match-status.joué {
+  background-color: #4CAF50;
+  color: white;
+}
+.match-status.prévu {
+  background-color: #FF9800;
+  color: white;
+}
+.match-status.annulé {
+  background-color: #f44336;
+  color: white;
 }
 .week {
   display: flex;

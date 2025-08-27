@@ -22,7 +22,7 @@ onBeforeMount(() => {
       <div class="player">
         <p class="player-name">{{ player.name }}</p>
         <router-link
-          :to="{ name: 'team', params: { id: player.team } }"
+          :to="{ name: 'team', params: { id: player.team_id || player.team } }"
           class="team"
           >{{ player.team_name }}</router-link
         >
