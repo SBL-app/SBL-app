@@ -2,9 +2,8 @@
 import { useRoute } from "vue-router";
 import { useSeasonStore } from "@/stores/seasons";
 import { useDivisionStore } from "@/stores/division";
-import { useTeamStatStore } from "@/stores/teamStat";
 import { storeToRefs } from "pinia";
-import { computed, onBeforeMount } from "vue";
+import { onBeforeMount } from "vue";
 
 const route = useRoute();
 const seasonStore = useSeasonStore();
@@ -15,17 +14,10 @@ const divisionStore = useDivisionStore();
 const { fetchDivisionBySeason } = divisionStore;
 const { divisions } = storeToRefs(divisionStore);
 
-const teamStatStore = useTeamStatStore();
-const { fetchTeamStatByDivisionId } = teamStatStore;
-
 onBeforeMount(async () => {
   const seasonId = route.params.id;
   await fetchSeason(seasonId);
   await fetchDivisionBySeason(seasonId);
-  // Attendre que les divisions soient chargées avant de récupérer les stats
-  for (const division of divisions.value) {
-    await fetchTeamStatByDivisionId(division.id);
-  }
 });
 </script>
 <template>
