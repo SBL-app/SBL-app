@@ -1,46 +1,47 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useTeamStore } from "@/stores/team";
-import { usePlayerStore } from "@/stores/player";
-import { useTeamStatStore } from "@/stores/teamStat";
-import { storeToRefs } from "pinia";
 import { RouterLink } from "vue-router";
 
 const route = useRoute();
 const teamStore = useTeamStore();
-const playerStore = usePlayerStore();
-const teamStatStore = useTeamStatStore();
 
-const { fetchTeam } = teamStore;
-const { fetchPlayersByTeam } = playerStore;
-const { fetchTeamStatByTeamId } = teamStatStore;
+const { fetchTeamDetails } = teamStore;
 
-const { team } = storeToRefs(teamStore);
-const { players } = storeToRefs(playerStore);
-const { teamStats } = storeToRefs(teamStatStore);
+// Variables réactives pour stocker les données
+const teamData = ref(null);
+const players = ref([]);
+const teamStats = ref([]);
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   const teamId = route.params.id;
-  fetchTeam(teamId);
-  fetchPlayersByTeam(teamId);
-  fetchTeamStatByTeamId(teamId);
-  console.log("team detail view");
+  try {
+    const data = await fetchTeamDetails(teamId);
+    teamData.value = data.team;
+    players.value = data.players;
+    teamStats.value = data.stats;
+  } catch (error) {
+    console.error('Erreur lors du chargement des détails de l\'équipe:', error);
+  }
 });
 </script>
 <template>
-  <div class="team-detail">
+  <div class="team-detail" v-if="teamData">
     <div class="teams container">
       <div class="team">
-        <p>{{ team.name }}</p>
+        <p>{{ teamData.name }}</p>
       </div>
     </div>
     <div class="players container">
       <p class="title">joueurs :</p>
-      <div class="captain">
-        <p>Captain : {{ team.captain }}</p>
+      <div class="captain" v-if="teamData.captain">
+        <p>Captain : {{ teamData.captain }}</p>
       </div>
-      <div class="players-cards">
+      <div class="captain" v-else>
+        <p>Aucun capitaine défini</p>
+      </div>
+      <div class="players-cards" v-if="players.length > 0">
         <RouterLink
           class="player"
           v-for="player in players"
@@ -50,10 +51,13 @@ onBeforeMount(() => {
           <p>{{ player.name }}</p>
         </RouterLink>
       </div>
+      <div v-else>
+        <p>Aucun joueur trouvé</p>
+      </div>
     </div>
     <div class="stats container" v-if="teamStats.length > 0">
       <p class="title">Résultats :</p>
-      <div class="stat" v-for="stat in teamStats" :key="stat.id">
+      <div class="stat" v-for="stat in teamStats" :key="`${stat.division_id}-${stat.season_id}`">
         <div class="stat-title">
           <RouterLink
             :to="{ name: 'season', params: { id: stat.season_id } }"
@@ -71,8 +75,10 @@ onBeforeMount(() => {
           <table class="results-table">
             <thead>
               <tr>
+                <th>Pos</th>
                 <th>V</th>
                 <th>D</th>
+                <th>N</th>
                 <th>J</th>
                 <th>MG</th>
                 <th>MP</th>
@@ -82,9 +88,11 @@ onBeforeMount(() => {
             </thead>
             <tbody>
               <tr>
+                <td>{{ stat.position }}/{{ stat.total_teams }}</td>
                 <td>{{ stat.wins }}</td>
                 <td>{{ stat.losses }}</td>
-                <td>{{ stat.wins + stat.losses }}</td>
+                <td>{{ stat.ties }}</td>
+                <td>{{ stat.wins + stat.losses + stat.ties }}</td>
                 <td>{{ stat.winRounds }}</td>
                 <td>{{ stat.looseRounds }}</td>
                 <td>{{ stat.points }}</td>
