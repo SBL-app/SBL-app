@@ -30,11 +30,18 @@ export const useTeamStore = defineStore("teams", () => {
     }));
   };
 
+  const fetchTeamDetails = async (teamId) => {
+    const response = await ky.get(`${API_URL}/teams/details?team_id=${teamId}`);
+    const data = await response.json();
+    return data;
+  };
+
   return {
     teams,
     team,
     fetchAllTeams,
     fetchTeam,
     fetchTeamsByDivision,
+    fetchTeamDetails,
   };
 });
