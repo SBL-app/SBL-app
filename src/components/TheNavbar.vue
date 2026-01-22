@@ -49,7 +49,7 @@ import { RouterLink } from "vue-router";
   width: 80px;
   height: 80px;
   display: flex;
-  background: url(img/sbl-logo.png) center / cover no-repeat;
+  background: url(/img/sbl-logo.png) center / cover no-repeat;
 }
 
 .logo-text {
@@ -77,13 +77,13 @@ import { RouterLink } from "vue-router";
 .discord-logo {
   width: 30px;
   height: 23px;
-  background: url(img/discord-logo.png) center / cover no-repeat;
+  background: url(/img/discord-logo.png) center / cover no-repeat;
 }
 
 .x-logo {
   width: 36px;
   height: 36px;
-  background: url(img/x-logo.png) center / cover no-repeat;
+  background: url(/img/x-logo.png) center / cover no-repeat;
 }
 
 a,
