@@ -1,5 +1,5 @@
 <script>
-import { computed, onBeforeMount, watch } from "vue";
+import { computed, onBeforeMount } from "vue";
 import { useSeasonStore } from "@/stores/seasons";
 import { storeToRefs } from "pinia";
 
@@ -15,14 +15,6 @@ export default {
 
     onBeforeMount(() => {
       fetchAllSeasons();
-    });
-
-    watch(seasons, (newSeasons) => {
-      if (newSeasons.length > 0) {
-        lastSeason.value = newSeasons[newSeasons.length - 1];
-      } else {
-        lastSeason.value = null;
-      }
     });
 
     return {
