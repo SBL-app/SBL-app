@@ -104,7 +104,7 @@ function progressStyle(percentage) {
   width: 100%;
   height: 6px;
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--surface-subtle, rgba(255, 255, 255, 0.08));
   overflow: hidden;
 }
 

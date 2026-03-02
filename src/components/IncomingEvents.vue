@@ -1,28 +1,19 @@
-<script>
+<script setup>
 import { computed, onBeforeMount } from "vue";
 import { useSeasonStore } from "@/stores/seasons";
 import { storeToRefs } from "pinia";
 
-export default {
-  setup() {
-    const seasonStore = useSeasonStore();
-    const { fetchAllSeasons } = seasonStore;
-    const { seasons } = storeToRefs(seasonStore);
+const seasonStore = useSeasonStore();
+const { fetchAllSeasons } = seasonStore;
+const { seasons } = storeToRefs(seasonStore);
 
-    const lastSeason = computed(() => {
-      return seasons.value.length > 0 ? seasons.value[seasons.value.length - 1] : null;
-    });
+const lastSeason = computed(() => {
+  return seasons.value.length > 0 ? seasons.value[seasons.value.length - 1] : null;
+});
 
-    onBeforeMount(() => {
-      fetchAllSeasons();
-    });
-
-    return {
-      seasons,
-      lastSeason
-    };
-  }
-};
+onBeforeMount(() => {
+  fetchAllSeasons();
+});
 </script>
 <template>
   <div class="event-container">

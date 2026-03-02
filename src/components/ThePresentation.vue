@@ -15,13 +15,14 @@ onBeforeMount(() => {
   <div class="presentation-container">
     <div class="presentation-card">
       <p class="section-label">Qui sommes-nous ?</p>
-      <p class="text">
+      <p class="text" v-if="seasons.length > 0">
         Créer en 2022, la Splatoon Baguette League se charge d'organiser des
         ligues sur Splatoon le plus souvent possible afin de soutenir la scène
         compétitive française présente sur le jeu. Depuis sa création la SBL à
         assurer {{ seasons.length - 1 }} saisons ainsi que différents tournois gravitant autour de ces
         saisons et prépare actuellement sa {{ seasons.length }} ème saison.
       </p>
+      <p class="text loading" v-else>Chargement...</p>
     </div>
   </div>
 </template>
@@ -58,5 +59,10 @@ onBeforeMount(() => {
   font-size: 15px;
   line-height: 1.8;
   max-width: 700px;
+}
+
+.loading {
+  color: var(--text-muted);
+  font-style: italic;
 }
 </style>
