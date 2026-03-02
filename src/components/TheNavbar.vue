@@ -31,41 +31,93 @@ import { RouterLink } from "vue-router";
 .nav {
   display: flex;
   width: 100%;
-  height: 80px;
+  height: 64px;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #fff;
-  background: linear-gradient(90deg, #2a1c59 0%, #130a2d 50%, #281a54 100%);
-  position: sticky;
+  background: rgba(8, 8, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+  padding: 0 24px;
+}
+
+/* Bordure dégradée en bas */
+.nav::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-violet), var(--accent-cyan));
 }
 
 .logo {
   display: flex;
   align-items: center;
-  justify-items: center;
+  gap: 12px;
+  text-decoration: none;
 }
 
 .logo-sbl {
-  width: 80px;
-  height: 80px;
-  display: flex;
+  width: 44px;
+  height: 44px;
   background: url(/img/sbl-logo.png) center / cover no-repeat;
+  flex-shrink: 0;
 }
 
-.logo-text {
-  display: flex;
-  align-items: center;
-  justify-items: center;
+.logo-text p {
+  font-size: 15px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.3;
 }
 
 .links {
   display: flex;
-  align-items: flex-start;
-  gap: 40px;
+  align-items: center;
+  gap: 32px;
 }
 
-.active {
-  text-decoration: underline;
+.links a {
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 4px 0;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-cyan);
+  transition: width 0.2s;
+}
+
+.links a:hover {
+  color: var(--text-primary);
+}
+
+.links a:hover::after {
+  width: 100%;
+}
+
+.links a.router-link-active {
+  color: var(--text-primary);
+}
+
+.links a.router-link-active::after {
+  width: 100%;
+  background: var(--accent-violet);
 }
 
 .socials {
@@ -74,25 +126,26 @@ import { RouterLink } from "vue-router";
   gap: 16px;
 }
 
+.socials a {
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.socials a:hover {
+  opacity: 1;
+}
+
 .discord-logo {
-  width: 30px;
-  height: 23px;
+  width: 26px;
+  height: 20px;
   background: url(/img/discord-logo.png) center / cover no-repeat;
 }
 
 .x-logo {
-  width: 36px;
-  height: 36px;
+  width: 20px;
+  height: 20px;
   background: url(/img/x-logo.png) center / cover no-repeat;
-}
-
-a,
-p {
-  color: #fff;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-decoration: none;
 }
 </style>
