@@ -9,19 +9,20 @@ const { seasons } = storeToRefs(seasonStore);
 
 onBeforeMount(() => {
   fetchAllSeasons();
-  console.log("the presentation");
 });
 </script>
 <template>
   <div class="presentation-container">
-    <p class="title">Qui sommes-nous ?</p>
-    <p class="text">
-      Créer en 2022, la Splatoon Baguette League se charge d’organiser des
-      ligues sur Splatoon le plus souvent possible afin de soutenir la scène
-      compétitive française présente sur le jeu. Depuis sa création la SBL à
-      assurer {{ seasons.length-1 }} saisons ainsi que différents tournois gravitant autour de ces
-      saisons et prépare actuellement sa {{ seasons.length }} ème saison.
-    </p>
+    <div class="presentation-card">
+      <p class="section-label">Qui sommes-nous ?</p>
+      <p class="text">
+        Créer en 2022, la Splatoon Baguette League se charge d'organiser des
+        ligues sur Splatoon le plus souvent possible afin de soutenir la scène
+        compétitive française présente sur le jeu. Depuis sa création la SBL à
+        assurer {{ seasons.length - 1 }} saisons ainsi que différents tournois gravitant autour de ces
+        saisons et prépare actuellement sa {{ seasons.length }} ème saison.
+      </p>
+    </div>
   </div>
 </template>
 <style scoped>
@@ -29,26 +30,33 @@ onBeforeMount(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 26px;
+  width: 100%;
+  max-width: 800px;
 }
 
-.title {
-  text-decoration-line: underline;
+.presentation-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px 32px;
+  width: 100%;
+  background: rgba(124, 58, 237, 0.06);
+  border-left: 3px solid var(--accent-violet);
+  border-radius: 0 12px 12px 0;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-violet);
 }
 
 .text {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 1000px;
-  text-align: center;
-}
-
-p {
-  color: #fff;
-  text-align: justify;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.8;
+  max-width: 700px;
 }
 </style>
