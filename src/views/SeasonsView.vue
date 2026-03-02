@@ -84,14 +84,6 @@ function progressStyle(percentage) {
   width: 100%;
 }
 
-.section-label {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-secondary);
-}
-
 .seasons-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -113,7 +105,7 @@ function progressStyle(percentage) {
 }
 
 .season-card.featured {
-  border-color: rgba(124, 58, 237, 0.5);
+  border-color: var(--border-card-featured);
 }
 
 .season-name {

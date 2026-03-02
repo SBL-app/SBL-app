@@ -23,7 +23,7 @@ onBeforeMount(() => {
         :to="{ name: 'team', params: { id: team.id } }"
       >
         <div class="team-avatar">
-          <span>{{ team.name.substring(0, 2).toUpperCase() }}</span>
+          <span>{{ (team.name ?? '??').substring(0, 2).toUpperCase() }}</span>
         </div>
         <p class="team-name">{{ team.name }}</p>
       </RouterLink>
@@ -31,14 +31,6 @@ onBeforeMount(() => {
   </div>
 </template>
 <style scoped>
-.section-label {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-secondary);
-}
-
 .teams-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -67,7 +59,7 @@ onBeforeMount(() => {
 }
 
 .team-avatar span {
-  color: white;
+  color: var(--text-primary);
   font-size: 20px;
   font-weight: 700;
   line-height: 1;

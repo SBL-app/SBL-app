@@ -17,6 +17,11 @@ const oldSeasons = computed(() => {
 onBeforeMount(() => {
   fetchAllSeasons();
 });
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+}
 </script>
 <template>
   <div class="page-wrapper">
@@ -26,21 +31,21 @@ onBeforeMount(() => {
       <p class="section-label">Anciens évènements</p>
       <div class="events-list">
         <RouterLink
-          v-for="season in oldSeasons"
-          :key="season.id"
-          :to="{ name: 'season', params: { id: season.id } }"
+          v-for="event in oldSeasons"
+          :key="event.id"
+          :to="{ name: 'season', params: { id: event.id } }"
           class="event-card glass-card"
         >
           <div class="event-accent"></div>
           <div class="event-content">
-            <p class="event-name">{{ season.name }}</p>
+            <p class="event-name">{{ event.name }}</p>
             <div class="event-meta">
               <div class="dates">
-                <span class="date">{{ season.start_date }}</span>
+                <span class="date">{{ formatDate(event.start_date) }}</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" class="arrow-icon">
                   <path d="M10.7832 8.66675H2.6665V7.33342H10.7832L7.04984 3.60008L7.99984 2.66675L13.3332 8.00008L7.99984 13.3334L7.04984 12.4001L10.7832 8.66675Z" fill="currentColor"/>
                 </svg>
-                <span class="date">{{ season.end_date }}</span>
+                <span class="date">{{ formatDate(event.end_date) }}</span>
               </div>
             </div>
             <span class="status-badge done">terminé</span>
@@ -57,14 +62,6 @@ onBeforeMount(() => {
   align-items: center;
   gap: 20px;
   width: 100%;
-}
-
-.section-label {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-secondary);
 }
 
 .events-list {

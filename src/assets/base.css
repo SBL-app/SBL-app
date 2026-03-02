@@ -16,6 +16,7 @@
 
   --border-card: rgba(124, 58, 237, 0.3);
   --border-card-hover: rgba(14, 165, 233, 0.5);
+  --border-card-featured: rgba(124, 58, 237, 0.5);
 
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
