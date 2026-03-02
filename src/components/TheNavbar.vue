@@ -3,7 +3,7 @@ import { RouterLink } from "vue-router";
 </script>
 <template>
   <div class="nav">
-    <RouterLink to="/home">
+    <RouterLink to="/home" class="logo-link">
       <div class="logo">
         <div class="logo-sbl"></div>
         <div class="logo-text">
@@ -37,7 +37,9 @@ import { RouterLink } from "vue-router";
   background: rgba(8, 8, 15, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   padding: 0 24px;
 }
 
@@ -52,11 +54,14 @@ import { RouterLink } from "vue-router";
   background: linear-gradient(90deg, var(--accent-violet), var(--accent-cyan));
 }
 
+.logo-link {
+  text-decoration: none;
+}
+
 .logo {
   display: flex;
   align-items: center;
   gap: 12px;
-  text-decoration: none;
 }
 
 .logo-sbl {
