@@ -10,9 +10,13 @@ const playerStore = usePlayerStore();
 const { fetchPlayer } = playerStore;
 const { player } = storeToRefs(playerStore);
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   const playerId = route.params.id;
-  fetchPlayer(playerId);
+  try {
+    await fetchPlayer(playerId);
+  } catch (error) {
+    console.error('Erreur lors du chargement du joueur:', error);
+  }
 });
 </script>
 <template>
