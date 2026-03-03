@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, watch } from "vue";
 import { usePlayerStore } from "@/stores/player";
 import { storeToRefs } from "pinia";
 import { RouterLink } from "vue-router";
@@ -10,14 +10,16 @@ const playerStore = usePlayerStore();
 const { fetchPlayer } = playerStore;
 const { player } = storeToRefs(playerStore);
 
-onBeforeMount(async () => {
-  const playerId = route.params.id;
+async function loadData(id) {
   try {
-    await fetchPlayer(playerId);
+    await fetchPlayer(id);
   } catch (error) {
     console.error('Erreur lors du chargement du joueur:', error);
   }
-});
+}
+
+onBeforeMount(() => loadData(route.params.id));
+watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
 </script>
 <template>
   <div class="page-wrapper">

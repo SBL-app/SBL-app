@@ -2,7 +2,7 @@
 import { useRoute, RouterLink } from "vue-router";
 import { useDivisionStore } from "@/stores/division";
 import { storeToRefs } from "pinia";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, watch, ref } from "vue";
 
 const route = useRoute();
 const divisionStore = useDivisionStore();
@@ -13,10 +13,9 @@ const ranking = ref([]);
 const teams = ref([]);
 const games = ref([]);
 
-onBeforeMount(async () => {
-  const divisionId = route.params.id;
+async function loadData(id) {
   try {
-    const data = await fetchDivisionDetails(divisionId);
+    const data = await fetchDivisionDetails(id);
     divisionData.value = data.division;
     ranking.value = data.ranking;
     teams.value = data.teams;
@@ -24,7 +23,10 @@ onBeforeMount(async () => {
   } catch (error) {
     console.error('Erreur lors du chargement des détails de la division:', error);
   }
-});
+}
+
+onBeforeMount(() => loadData(route.params.id));
+watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
 
 function formatDate(dateStr) {
   if (!dateStr) return '';

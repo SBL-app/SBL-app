@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, watch, ref } from "vue";
 import { useTeamStore } from "@/stores/team";
 import { RouterLink } from "vue-router";
 
@@ -12,17 +12,19 @@ const teamData = ref(null);
 const players = ref([]);
 const teamStats = ref([]);
 
-onBeforeMount(async () => {
-  const teamId = route.params.id;
+async function loadData(id) {
   try {
-    const data = await fetchTeamDetails(teamId);
+    const data = await fetchTeamDetails(id);
     teamData.value = data.team;
     players.value = data.players;
     teamStats.value = data.stats;
   } catch (error) {
     console.error('Erreur lors du chargement des détails de l\'équipe:', error);
   }
-});
+}
+
+onBeforeMount(() => loadData(route.params.id));
+watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
 </script>
 <template>
   <div class="page-wrapper" v-if="teamData">

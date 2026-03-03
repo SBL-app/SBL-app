@@ -3,7 +3,7 @@ import { useRoute, RouterLink } from "vue-router";
 import { useSeasonStore } from "@/stores/seasons";
 import { useDivisionStore } from "@/stores/division";
 import { storeToRefs } from "pinia";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, watch } from "vue";
 
 const route = useRoute();
 const seasonStore = useSeasonStore();
@@ -14,11 +14,13 @@ const divisionStore = useDivisionStore();
 const { fetchDivisionBySeason } = divisionStore;
 const { divisions } = storeToRefs(divisionStore);
 
-onBeforeMount(async () => {
-  const seasonId = route.params.id;
-  await fetchSeason(seasonId);
-  await fetchDivisionBySeason(seasonId);
-});
+async function loadData(id) {
+  await fetchSeason(id);
+  await fetchDivisionBySeason(id);
+}
+
+onBeforeMount(() => loadData(route.params.id));
+watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
