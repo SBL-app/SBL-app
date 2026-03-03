@@ -43,8 +43,20 @@ function onKeydown(e) {
   if (e.key === "Escape") emit("close");
 }
 
+function onClickOutside(e) {
+  const dropdown = document.querySelector(".search-dropdown");
+  const btn = document.querySelector(".search-btn");
+  if (
+    dropdown && !dropdown.contains(e.target) &&
+    btn && !btn.contains(e.target)
+  ) {
+    emit("close");
+  }
+}
+
 onMounted(async () => {
   document.addEventListener("keydown", onKeydown);
+  document.addEventListener("click", onClickOutside);
   try {
     await searchStore.load();
   } catch {
@@ -56,6 +68,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   document.removeEventListener("keydown", onKeydown);
+  document.removeEventListener("click", onClickOutside);
 });
 </script>
 

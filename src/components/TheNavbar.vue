@@ -1,9 +1,14 @@
 <script setup>
 import { ref } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import TheSearchDropdown from "./TheSearchDropdown.vue";
 
 const searchOpen = ref(false);
+const router = useRouter();
+
+router.afterEach(() => {
+  searchOpen.value = false;
+});
 </script>
 <template>
   <div class="nav">
