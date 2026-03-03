@@ -1,5 +1,9 @@
 <script setup>
+import { ref } from "vue";
 import { RouterLink } from "vue-router";
+import TheSearchDropdown from "./TheSearchDropdown.vue";
+
+const searchOpen = ref(false);
 </script>
 <template>
   <div class="nav">
@@ -17,13 +21,28 @@ import { RouterLink } from "vue-router";
       <RouterLink to="/events">évènements</RouterLink>
       <RouterLink to="/teams">équipes</RouterLink>
     </div>
-    <div class="socials">
-      <a href="https://discord.gg/SJgnEYQwcV"> <!-- TODO : check the link -->
-        <div class="discord-logo"></div>
-      </a>
-      <a href="https://x.com/sbaguetteleague">
-        <div class="x-logo"></div>
-      </a>
+    <div class="nav-right">
+      <div class="search-wrapper">
+        <button
+          class="search-btn"
+          :class="{ active: searchOpen }"
+          aria-label="Rechercher"
+          @click="searchOpen = !searchOpen"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+        </button>
+        <TheSearchDropdown v-if="searchOpen" @close="searchOpen = false" />
+      </div>
+      <div class="socials">
+        <a href="https://discord.gg/SJgnEYQwcV">
+          <div class="discord-logo"></div>
+        </a>
+        <a href="https://x.com/sbaguetteleague">
+          <div class="x-logo"></div>
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -123,6 +142,37 @@ import { RouterLink } from "vue-router";
 .links a.router-link-active::after {
   width: 100%;
   background: var(--accent-violet);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+.search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.search-btn:hover,
+.search-btn.active {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: var(--accent-violet);
+  color: var(--text-primary);
 }
 
 .socials {
