@@ -13,12 +13,14 @@ export const useGameStore = defineStore("games", () => {
   };
 
   const fetchGame = async (id) => {
-    const response = await ky.get(`${API_URL}/games?id=${id}`);
+    const response = await ky.get(`${API_URL}/games/${id}`);
     game.value = await response.json();
   };
 
   const fetchGamesByDivisionId = async (id) => {
-    const response = await ky.get(`${API_URL}/games?division_id=${id}`);
+    const response = await ky.get(`${API_URL}/games`, {
+      searchParams: { division_id: id }
+    });
     games.value = await response.json();
   }
 

@@ -8,12 +8,12 @@ export const useGameStatusStore = defineStore("gameStatus", () => {
   const gameStatus = ref({});
 
   const fetchAllGameStatuses = async () => {
-    const response = await ky.get(`${API_URL}/gameStatus`);
+    const response = await ky.get(`${API_URL}/game-statuses`);
     gameStatuses.value = await response.json();
   };
 
   const fetchGameStatus = async (id) => {
-    const response = await ky.get(`${API_URL}/gameStatus?id=${id}`);
+    const response = await ky.get(`${API_URL}/game-statuses/${id}`);
     gameStatus.value = await response.json();
   };
 

@@ -13,17 +13,15 @@ export const useTeamStore = defineStore("teams", () => {
   };
 
   const fetchTeam = async (id) => {
-    const response = await ky.get(`${API_URL}/teams?id=${id}`);
+    const response = await ky.get(`${API_URL}/teams/${id}`);
     team.value = await response.json();
   };
 
   const fetchTeamsByDivision = async (divisionId) => {
-    // Pour récupérer les équipes d'une division, on utilise l'endpoint teamStats filtré par division
-    const response = await ky.get(`${API_URL}/teamStats`, {
+    const response = await ky.get(`${API_URL}/team-stats`, {
       searchParams: { division_id: divisionId }
     });
     const teamStatsData = await response.json();
-    // Extraire uniquement les informations des équipes
     teams.value = teamStatsData.map(stat => ({
       id: stat.team_id,
       name: stat.team_name
@@ -31,7 +29,9 @@ export const useTeamStore = defineStore("teams", () => {
   };
 
   const fetchTeamDetails = async (teamId) => {
-    const response = await ky.get(`${API_URL}/teams/details?team_id=${teamId}`);
+    const response = await ky.get(`${API_URL}/teams/${teamId}`, {
+      searchParams: { expand: "players,stats" }
+    });
     const data = await response.json();
     return data;
   };

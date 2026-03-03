@@ -13,17 +13,21 @@ export const useRegistrationStore = defineStore("registrations", () => {
   };
 
   const fetchRegistrationsBySeasonId = async (seasonId) => {
-    const response = await ky.get(`${API_URL}/registrations?season_id=${seasonId}`);
+    const response = await ky.get(`${API_URL}/registrations`, {
+      searchParams: { season_id: seasonId }
+    });
     registrations.value = await response.json();
   };
 
   const fetchRegistrationsByTeamId = async (teamId) => {
-    const response = await ky.get(`${API_URL}/registrations?team_id=${teamId}`);
+    const response = await ky.get(`${API_URL}/registrations`, {
+      searchParams: { team_id: teamId }
+    });
     registrations.value = await response.json();
   };
 
   const fetchRegistration = async (id) => {
-    const response = await ky.get(`${API_URL}/registrations?id=${id}`);
+    const response = await ky.get(`${API_URL}/registrations/${id}`);
     registration.value = await response.json();
   };
 
