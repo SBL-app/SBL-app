@@ -74,6 +74,7 @@ onUnmounted(() => {
         aria-label="Rechercher dans la ligue"
         aria-autocomplete="list"
         :aria-expanded="hasResults"
+        aria-controls="search-listbox"
       />
       <span v-if="searchStore.isLoading" class="loading-dot"></span>
     </div>
@@ -82,13 +83,21 @@ onUnmounted(() => {
       Aucun résultat pour "{{ query }}"
     </div>
 
-    <div v-if="hasResults" class="results-list" role="listbox">
+    <div v-if="hasResults" id="search-listbox" class="results-list" role="listbox">
       <template v-for="item in results" :key="item.isHeader ? item.type : item.route">
         <div v-if="item.isHeader" class="result-category">{{ item.type }}</div>
-        <button v-else class="result-item" role="option" @click="navigate(item.route)">
+        <div
+          v-else
+          class="result-item"
+          role="option"
+          tabindex="0"
+          @click="navigate(item.route)"
+          @keydown.enter.prevent="navigate(item.route)"
+          @keydown.space.prevent="navigate(item.route)"
+        >
           <span class="result-label">{{ item.label }}</span>
           <span v-if="item.sublabel" class="result-sublabel">{{ item.sublabel }}</span>
-        </button>
+        </div>
       </template>
     </div>
   </div>
