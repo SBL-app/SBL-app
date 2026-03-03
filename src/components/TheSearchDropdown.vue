@@ -71,7 +71,7 @@ onUnmounted(() => {
       <span v-if="searchStore.isLoading" class="loading-dot"></span>
     </div>
 
-    <div v-if="query && !hasResults && !searchStore.isLoading" class="no-results">
+    <div v-if="query.trim() && !hasResults && !searchStore.isLoading" class="no-results">
       Aucun résultat pour "{{ query }}"
     </div>
 
