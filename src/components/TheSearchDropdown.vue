@@ -90,6 +90,7 @@ onUnmounted(() => {
           v-else
           class="result-item"
           role="option"
+          aria-selected="false"
           tabindex="0"
           @click="navigate(item.route)"
           @keydown.enter.prevent="navigate(item.route)"
@@ -181,6 +182,12 @@ onUnmounted(() => {
 }
 
 .result-item:hover {
+  background: rgba(124, 58, 237, 0.12);
+}
+
+.result-item:focus-visible {
+  outline: 2px solid var(--accent-violet);
+  outline-offset: -2px;
   background: rgba(124, 58, 237, 0.12);
 }
 
