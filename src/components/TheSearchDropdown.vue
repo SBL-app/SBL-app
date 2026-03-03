@@ -44,10 +44,14 @@ function onKeydown(e) {
 }
 
 onMounted(async () => {
-  await searchStore.load();
+  document.addEventListener("keydown", onKeydown);
+  try {
+    await searchStore.load();
+  } catch {
+    // le store gère isLoading via finally
+  }
   await nextTick();
   inputRef.value?.focus();
-  document.addEventListener("keydown", onKeydown);
 });
 
 onUnmounted(() => {
@@ -56,9 +60,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="search-dropdown glass-card">
+  <div class="search-dropdown glass-card" role="search">
     <div class="search-input-row">
-      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
       </svg>
       <input
@@ -67,6 +71,9 @@ onUnmounted(() => {
         class="search-input"
         placeholder="Rechercher..."
         type="text"
+        aria-label="Rechercher dans la ligue"
+        aria-autocomplete="list"
+        :aria-expanded="hasResults"
       />
       <span v-if="searchStore.isLoading" class="loading-dot"></span>
     </div>
@@ -75,10 +82,10 @@ onUnmounted(() => {
       Aucun résultat pour "{{ query }}"
     </div>
 
-    <div v-if="hasResults" class="results-list">
+    <div v-if="hasResults" class="results-list" role="listbox">
       <template v-for="item in results" :key="item.isHeader ? item.type : item.route">
         <div v-if="item.isHeader" class="result-category">{{ item.type }}</div>
-        <button v-else class="result-item" @click="navigate(item.route)">
+        <button v-else class="result-item" role="option" @click="navigate(item.route)">
           <span class="result-label">{{ item.label }}</span>
           <span v-if="item.sublabel" class="result-sublabel">{{ item.sublabel }}</span>
         </button>
