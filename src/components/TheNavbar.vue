@@ -1,15 +1,25 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
+import { useAuthStore } from "../stores/auth";
+import { API_URL } from "../../API_URL";
 import TheSearchDropdown from "./TheSearchDropdown.vue";
+import TheUserMenu from "./TheUserMenu.vue";
 
 const searchOpen = ref(false);
 const router = useRouter();
+const auth = useAuthStore();
 
 router.afterEach(() => {
   searchOpen.value = false;
 });
+
+const discordLoginUrl = computed(() => {
+  const redirectAfter = encodeURIComponent(window.location.origin);
+  return `${API_URL}/auth/discord?redirect_after=${redirectAfter}`;
+});
 </script>
+
 <template>
   <div class="nav">
     <RouterLink to="/home" class="logo-link">
@@ -40,6 +50,13 @@ router.afterEach(() => {
         </button>
         <TheSearchDropdown v-if="searchOpen" @close="searchOpen = false" />
       </div>
+      <div class="nav-auth">
+        <TheUserMenu v-if="auth.isAuthenticated" />
+        <a v-else :href="discordLoginUrl" class="login-btn">
+          <div class="discord-logo-sm"></div>
+          Se connecter
+        </a>
+      </div>
       <div class="socials">
         <a href="https://discord.gg/SJgnEYQwcV">
           <div class="discord-logo"></div>
@@ -51,6 +68,7 @@ router.afterEach(() => {
     </div>
   </div>
 </template>
+
 <style scoped>
 .nav {
   display: flex;
@@ -178,6 +196,39 @@ router.afterEach(() => {
   background: rgba(124, 58, 237, 0.15);
   border-color: var(--accent-violet);
   color: var(--text-primary);
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+}
+
+.login-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(88, 101, 242, 0.15);
+  border: 1px solid rgba(88, 101, 242, 0.4);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background: rgba(88, 101, 242, 0.3);
+  border-color: #5865f2;
+}
+
+.discord-logo-sm {
+  width: 18px;
+  height: 14px;
+  background: url(/img/discord-logo.png) center / cover no-repeat;
+  flex-shrink: 0;
 }
 
 .socials {
