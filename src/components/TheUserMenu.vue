@@ -1,6 +1,5 @@
 <script setup>
-import { ref } from "vue";
-import { onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useAuthStore } from "../stores/auth";
 
 const auth = useAuthStore();
@@ -8,6 +7,7 @@ const menuOpen = ref(false);
 const menuRef = ref(null);
 
 function getAvatarUrl(user) {
+  if (!user) return `https://cdn.discordapp.com/embed/avatars/0.png`;
   if (user.discord_avatar && user.discord_id) {
     return `https://cdn.discordapp.com/avatars/${user.discord_id}/${user.discord_avatar}.png?size=64`;
   }
@@ -26,20 +26,28 @@ onUnmounted(() => document.removeEventListener("mousedown", handleClickOutside))
 
 <template>
   <div class="user-menu" ref="menuRef">
-    <button class="user-trigger" @click="menuOpen = !menuOpen" aria-label="Menu utilisateur">
-      <img
-        :src="getAvatarUrl(auth.user)"
-        :alt="auth.user.discord_username"
-        class="user-avatar"
-      />
-      <span class="user-name">{{ auth.user.discord_username }}</span>
-    </button>
-
-    <div v-if="menuOpen" class="user-dropdown">
-      <button class="logout-btn" @click="auth.logout(); menuOpen = false">
-        Se déconnecter
+    <template v-if="auth.user">
+      <button
+        class="user-trigger"
+        @click="menuOpen = !menuOpen"
+        aria-label="Menu utilisateur"
+        :aria-expanded="menuOpen"
+        aria-haspopup="true"
+      >
+        <img
+          :src="getAvatarUrl(auth.user)"
+          :alt="auth.user.discord_username"
+          class="user-avatar"
+        />
+        <span class="user-name">{{ auth.user.discord_username }}</span>
       </button>
-    </div>
+
+      <div v-if="menuOpen" class="user-dropdown">
+        <button class="logout-btn" @click="auth.logout(); menuOpen = false">
+          Se déconnecter
+        </button>
+      </div>
+    </template>
   </div>
 </template>
 
