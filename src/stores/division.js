@@ -8,12 +8,12 @@ export const useDivisionStore = defineStore("divisions", () => {
   const division = ref({});
 
   const fetchAllDivisions = async () => {
-    const response = await ky.get(`${API_URL}/division`);
+    const response = await ky.get(`${API_URL}/divisions`);
       divisions.value = await response.json();
   };
 
   const fetchDivisionBySeason = async (seasonId) => {
-    const response = await ky.get(`${API_URL}/division/season?id=${seasonId}`);
+    const response = await ky.get(`${API_URL}/seasons/${seasonId}/divisions`);
       const divisionsData = await response.json();
 
       const sortedDivisions = divisionsData.map((division) => {
@@ -26,12 +26,12 @@ export const useDivisionStore = defineStore("divisions", () => {
   }
 
   const fetchDivision = async (id) => {
-    const response = await ky.get(`${API_URL}/division?id=${id}`);
+    const response = await ky.get(`${API_URL}/divisions/${id}`);
       division.value = await response.json();
   };
 
   const fetchDivisionDetails = async (divisionId) => {
-    const response = await ky.get(`${API_URL}/division/details?division_id=${divisionId}`);
+    const response = await ky.get(`${API_URL}/divisions/${divisionId}/details`);
     const data = await response.json();
     return data;
   };

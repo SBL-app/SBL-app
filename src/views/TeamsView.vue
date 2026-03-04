@@ -10,59 +10,65 @@ const { teams } = storeToRefs(teamStore);
 
 onBeforeMount(() => {
   fetchAllTeams();
-  console.log("teams view");
 });
 </script>
 <template>
-  <div class="teams-container">
-    <p class="title">équipes :</p>
-    <div class="teams">
+  <div class="page-wrapper">
+    <p class="section-label">Équipes</p>
+    <div class="teams-grid">
       <RouterLink
-        class="team"
+        class="team-card glass-card"
         v-for="team in teams"
         :key="team.id"
         :to="{ name: 'team', params: { id: team.id } }"
       >
-        <p>{{ team.name }}</p>
+        <div class="team-avatar">
+          <span>{{ (team.name ?? '??').substring(0, 2).toUpperCase() }}</span>
+        </div>
+        <p class="team-name">{{ team.name }}</p>
       </RouterLink>
     </div>
   </div>
 </template>
 <style scoped>
-p {
-  color: #fff;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 28px 16px 20px;
   text-decoration: none;
 }
-.title {
-  text-decoration: underline;
-}
-.teams-container {
+
+.team-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 26px;
-  width: 100%;
+  justify-content: center;
+  flex-shrink: 0;
 }
-.teams {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  align-items: center;
-  gap: 20px;
-  width: 80%;
+
+.team-avatar span {
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
 }
-.team {
-  display: flex;
-  padding: 24px;
-  flex-direction: column;
-  align-items: center;
+
+.team-name {
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 600;
   text-align: center;
-  border-radius: 8px;
-  background: var(--embed-color-1, #5c47e0);
-  width: 100%;
-  box-sizing: border-box;
 }
 </style>

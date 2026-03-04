@@ -1,253 +1,256 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, watch, ref } from "vue";
 import { useTeamStore } from "@/stores/team";
 import { RouterLink } from "vue-router";
 
 const route = useRoute();
 const teamStore = useTeamStore();
-
 const { fetchTeamDetails } = teamStore;
 
-// Variables réactives pour stocker les données
 const teamData = ref(null);
 const players = ref([]);
 const teamStats = ref([]);
 
-onBeforeMount(async () => {
-  const teamId = route.params.id;
+async function loadData(id) {
   try {
-    const data = await fetchTeamDetails(teamId);
+    const data = await fetchTeamDetails(id);
     teamData.value = data.team;
     players.value = data.players;
     teamStats.value = data.stats;
   } catch (error) {
     console.error('Erreur lors du chargement des détails de l\'équipe:', error);
   }
-});
+}
+
+onBeforeMount(() => loadData(route.params.id));
+watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
 </script>
 <template>
-  <div class="team-detail" v-if="teamData">
-    <div class="teams container">
-      <div class="team">
-        <p>{{ teamData.name }}</p>
+  <div class="page-wrapper" v-if="teamData">
+    <!-- Hero équipe -->
+    <div class="team-hero glass-card">
+      <div class="team-avatar">
+        <span>{{ (teamData.name ?? '??').substring(0, 2).toUpperCase() }}</span>
+      </div>
+      <div class="team-info">
+        <p class="team-name">{{ teamData.name }}</p>
+        <p class="captain-info" v-if="teamData.captain">Capitaine : {{ teamData.captain }}</p>
+        <p class="captain-info muted" v-else>Aucun capitaine défini</p>
       </div>
     </div>
-    <div class="players container">
-      <p class="title">joueurs :</p>
-      <div class="captain" v-if="teamData.captain">
-        <p>Captain : {{ teamData.captain }}</p>
-      </div>
-      <div class="captain" v-else>
-        <p>Aucun capitaine défini</p>
-      </div>
-      <div class="players-cards" v-if="players.length > 0">
+
+    <!-- Joueurs -->
+    <div class="section">
+      <p class="section-label">Joueurs</p>
+      <div class="players-grid" v-if="players.length > 0">
         <RouterLink
-          class="player"
+          class="player-card glass-card"
           v-for="player in players"
           :key="player.id"
           :to="{ name: 'player', params: { id: player.id } }"
         >
-          <p>{{ player.name }}</p>
+          <p class="player-name">{{ player.name }}</p>
         </RouterLink>
       </div>
-      <div v-else>
-        <p>Aucun joueur trouvé</p>
-      </div>
+      <p v-else class="empty-msg">Aucun joueur trouvé</p>
     </div>
-    <div class="stats container" v-if="teamStats.length > 0">
-      <p class="title">Résultats :</p>
-      <div class="stat" v-for="stat in teamStats" :key="`${stat.division_id}-${stat.season_id}`">
-        <div class="stat-title">
-          <RouterLink
-            :to="{ name: 'season', params: { id: stat.season_id } }"
-            class="season"
-            >{{ stat.season_name }}</RouterLink
-          >
-          <p>/</p>
-          <RouterLink
-            :to="{ name: 'division', params: { id: stat.division_id } }"
-            class="division"
-            >{{ stat.division_name }}</RouterLink
-          >
-        </div>
-        <div class="result">
-          <table class="results-table">
-            <thead>
-              <tr>
-                <th>Pos</th>
-                <th>V</th>
-                <th>D</th>
-                <th>N</th>
-                <th>J</th>
-                <th>MG</th>
-                <th>MP</th>
-                <th>PT</th>
-                <th>Diff</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ stat.position }}/{{ stat.total_teams }}</td>
-                <td>{{ stat.wins }}</td>
-                <td>{{ stat.losses }}</td>
-                <td>{{ stat.ties }}</td>
-                <td>{{ stat.wins + stat.losses + stat.ties }}</td>
-                <td>{{ stat.winRounds }}</td>
-                <td>{{ stat.looseRounds }}</td>
-                <td>{{ stat.points }}</td>
-                <td>{{ stat.winRounds - stat.looseRounds }}</td>
-              </tr>
-            </tbody>
-          </table>
+
+    <!-- Résultats -->
+    <div class="section" v-if="teamStats.length > 0">
+      <p class="section-label">Résultats</p>
+      <div class="stats-list">
+        <div class="stat-card glass-card" v-for="stat in teamStats" :key="`${stat.division_id}-${stat.season_id}`">
+          <div class="stat-breadcrumb">
+            <RouterLink :to="{ name: 'season', params: { id: stat.season_id } }" class="bc-link">{{ stat.season_name }}</RouterLink>
+            <span class="bc-sep">/</span>
+            <RouterLink :to="{ name: 'division', params: { id: stat.division_id } }" class="bc-link">{{ stat.division_name }}</RouterLink>
+          </div>
+          <div class="stat-table-wrapper">
+            <table class="stat-table">
+              <thead>
+                <tr>
+                  <th>Pos</th><th>V</th><th>D</th><th>N</th><th>J</th>
+                  <th>MG</th><th>MP</th><th>Pts</th><th>+/-</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ stat.position }}/{{ stat.total_teams }}</td>
+                  <td>{{ stat.wins }}</td>
+                  <td>{{ stat.losses }}</td>
+                  <td>{{ stat.ties }}</td>
+                  <td>{{ stat.wins + stat.losses + stat.ties }}</td>
+                  <td>{{ stat.winRounds }}</td>
+                  <td>{{ stat.looseRounds }}</td>
+                  <td class="pts">{{ stat.points }}</td>
+                  <td>{{ stat.winRounds - stat.looseRounds }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-    <div class="stats container" v-else>
-      <p class="title">Résultats :</p>
-      <p>Aucun résultat trouvé</p>
+    <div class="section" v-else>
+      <p class="section-label">Résultats</p>
+      <p class="empty-msg">Aucun résultat trouvé</p>
     </div>
   </div>
 </template>
 <style scoped>
-p,
-td,
-th {
-  color: #fff;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+.team-hero {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 32px;
+  width: 100%;
+}
+
+.team-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.team-avatar span {
+  color: var(--text-primary);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.team-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.team-name {
+  font-size: 28px;
+  font-weight: 800;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.captain-info {
+  font-size: 14px;
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+.captain-info.muted { color: var(--text-secondary); }
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+}
+
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.player-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
   text-decoration: none;
 }
-.title {
-  text-decoration: underline;
-}
-.team-detail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 26px;
-  width: 100%;
-}
-.team {
-  display: flex;
-  padding: 24px;
-  flex-direction: column;
-  align-items: center;
-  gap: 26px;
-  border-radius: 20px;
-  background: var(--embed-color-2, #190d3f);
-}
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 26px;
-  width: 100%;
-}
-.players-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  align-items: center;
-  gap: 20px;
-  width: 80%;
-}
-.player {
-  display: flex;
-  padding: 24px;
-  flex-direction: column;
-  align-items: center;
+
+.player-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
   text-align: center;
-  border-radius: 8px;
-  background: var(--embed-color-1, #5c47e0);
+}
+
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   width: 100%;
-  box-sizing: border-box;
 }
-.stat {
-  display: flex;
-  padding: 24px;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  border-radius: 20px;
-}
-.result {
+
+.stat-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  background-color: #5c47e0;
-  border-radius: 40px;
+  gap: 12px;
+  padding: 20px 24px;
 }
-.results-table {
-  padding: 24px;
-  border-radius: 20px; /* Ajout d'un border-radius au tableau */
-  background: var(--embed-color-1, #5c47e0);
-  border-collapse: collapse; /* Fusionner les bordures pour supprimer les lignes blanches */
-  box-sizing: border-box;
+
+.stat-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bc-link {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+
+.bc-link:hover { color: var(--accent-cyan); }
+.bc-sep { color: var(--text-muted); font-size: 13px; }
+
+.stat-table-wrapper { overflow-x: auto; }
+
+.stat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.stat-table th {
+  padding: 8px 12px;
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   text-align: center;
-  overflow: hidden; /* Assure que le border-radius s'applique correctement */
-  margin: 20px;
 }
 
-.results-table th,
-.results-table td {
-  padding: 15px 20px; /* Ajouter de l'espace à l'intérieur des cellules */
-  border: none; /* Supprimer les bordures blanches */
-  font-size: 18px; /* Taille de police légèrement plus grande */
+.stat-table td {
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.03);
+  color: var(--text-primary);
+  text-align: center;
+  font-size: 14px;
 }
 
-.results-table th {
-  background-color: var(--embed-color-2, #5c47e0); /* Couleur de fond pour les en-têtes */
-  text-transform: uppercase; /* Texte en majuscules */
-  font-weight: bold; /* Texte en gras */
+.stat-table .pts {
+  font-weight: 700;
+  color: var(--accent-cyan);
 }
 
-.results-table td {
-  background-color: var(--embed-color-1, #190d3f); /* Couleur de fond uniforme pour les cellules */
-}
-
-/* Ajouter un border-radius sur les coins supérieurs du corps */
-.results-table tbody tr:first-child td:first-child {
-  border-top-left-radius: 20px; /* Coin supérieur gauche */
-}
-
-.results-table tbody tr:first-child td:last-child {
-  border-top-right-radius: 20px; /* Coin supérieur droit */
-}
-
-.results-table a {
-  color: #fff;
-  text-decoration: underline;
-}
-
-results-table thead {
-  border-bottom: none; /* Supprimer la bordure en bas de l'en-tête */
-}
-
-.results-table tbody tr:last-child td {
-  border-bottom: none; /* Supprimer la bordure en bas de la dernière ligne */
-}
-.stat-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: underline;
-}
-.detail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.captain {
-  display: flex;
-  padding: 24px;
-  flex-direction: column;
-  align-items: center;
-  gap: 26px;
-  border-radius: 20px;
-  background: var(--embed-color-2, #190d3f);
+.empty-msg {
+  color: var(--text-secondary);
+  font-size: 15px;
 }
 </style>
