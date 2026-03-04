@@ -6,10 +6,7 @@ import TheNavbar from "./components/TheNavbar.vue";
 const auth = useAuthStore();
 
 onMounted(() => {
-  // Charger la session existante depuis localStorage
-  auth.loadFromStorage();
-
-  // Détecter le callback OAuth Discord
+  // Détecter le callback OAuth Discord en priorité
   const params = new URLSearchParams(window.location.search);
   const token = params.get("token");
   const userBase64 = params.get("user");
@@ -17,8 +14,10 @@ onMounted(() => {
   if (token && userBase64) {
     auth.initFromCallback(token, userBase64);
     // Nettoyer l'URL sans recharger la page
-    const cleanUrl = window.location.pathname;
-    window.history.replaceState({}, document.title, cleanUrl);
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
+    // Charger la session existante depuis localStorage uniquement si pas de callback
+    auth.loadFromStorage();
   }
 });
 </script>

@@ -24,6 +24,11 @@ export const useAuthStore = defineStore("auth", () => {
 
   function initFromCallback(rawToken, userBase64) {
     try {
+      // Valider le format JWT (3 segments séparés par des points)
+      const JWT_REGEX = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
+      if (!JWT_REGEX.test(rawToken)) {
+        throw new Error("Invalid token format");
+      }
       const decoded = JSON.parse(atob(userBase64));
       if (!decoded || typeof decoded !== 'object' || !decoded.id) {
         throw new Error("Invalid user payload");
