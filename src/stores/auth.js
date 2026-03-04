@@ -25,11 +25,15 @@ export const useAuthStore = defineStore("auth", () => {
   function initFromCallback(rawToken, userBase64) {
     try {
       const decoded = JSON.parse(atob(userBase64));
+      if (!decoded || typeof decoded !== 'object' || !decoded.id) {
+        throw new Error("Invalid user payload");
+      }
       token.value = rawToken;
       user.value = decoded;
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ token: rawToken, user: decoded }));
     } catch {
       console.error("Failed to parse auth callback data");
+      logout();
     }
   }
 
