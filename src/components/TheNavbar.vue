@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import TheSearchDropdown from "./TheSearchDropdown.vue";
+import { usePushNotifications } from '@/composables/usePushNotifications'
 
 const searchOpen = ref(false);
 const router = useRouter();
@@ -9,6 +10,20 @@ const router = useRouter();
 router.afterEach(() => {
   searchOpen.value = false;
 });
+
+const { isSupported, permission, isSubscribed, isLoading, subscribe, unsubscribe, checkSubscriptionStatus } = usePushNotifications()
+
+onMounted(() => {
+  checkSubscriptionStatus()
+})
+
+function toggleNotifications() {
+  if (isSubscribed.value) {
+    unsubscribe()
+  } else {
+    subscribe()
+  }
+}
 </script>
 <template>
   <div class="nav">
@@ -40,6 +55,21 @@ router.afterEach(() => {
         </button>
         <TheSearchDropdown v-if="searchOpen" @close="searchOpen = false" />
       </div>
+      <button
+        v-if="isSupported && permission !== 'denied'"
+        class="notif-btn"
+        :class="{ active: isSubscribed, loading: isLoading }"
+        :aria-label="isSubscribed ? 'Désactiver les notifications' : 'Activer les notifications'"
+        :disabled="isLoading"
+        @click="toggleNotifications"
+      >
+        <svg v-if="!isSubscribed" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </button>
       <div class="socials">
         <a href="https://discord.gg/SJgnEYQwcV">
           <div class="discord-logo"></div>
@@ -178,6 +208,32 @@ router.afterEach(() => {
   background: rgba(124, 58, 237, 0.15);
   border-color: var(--accent-violet);
   color: var(--text-primary);
+}
+
+.notif-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.notif-btn:hover,
+.notif-btn.active {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: var(--accent-violet);
+  color: var(--text-primary);
+}
+
+.notif-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .socials {
