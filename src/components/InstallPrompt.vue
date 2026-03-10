@@ -22,6 +22,7 @@ async function install() {
 
 function dismiss() {
   isVisible.value = false
+  deferredPrompt.value = null
 }
 
 onMounted(() => window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt))

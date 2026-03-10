@@ -56,12 +56,12 @@ export function usePushNotifications() {
   }
 
   async function unsubscribe() {
+    const registration = await navigator.serviceWorker.ready
+    const subscription = await registration.pushManager.getSubscription()
+    if (!subscription) return
+
     isLoading.value = true
     try {
-      const registration = await navigator.serviceWorker.ready
-      const subscription = await registration.pushManager.getSubscription()
-      if (!subscription) return
-
       // TODO: ajouter le header Authorization quand l'auth JWT sera implémentée
       await ky.delete(`${API_URL}/push/subscribe`, { json: { endpoint: subscription.endpoint } })
       await subscription.unsubscribe()
