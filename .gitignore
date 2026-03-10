@@ -31,3 +31,5 @@ coverage
 
 # Environment variables (contains secrets)
 .env
+
+.superpowers/
