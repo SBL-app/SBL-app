@@ -43,7 +43,7 @@ onUnmounted(() => document.removeEventListener("mousedown", handleClickOutside))
       </button>
 
       <div v-if="menuOpen" class="user-dropdown">
-        <button class="logout-btn" @click="auth.logout(); menuOpen = false">
+        <button class="logout-btn" @click="auth.logout().then(() => menuOpen = false)">
           Se déconnecter
         </button>
       </div>
