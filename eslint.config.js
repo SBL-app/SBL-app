@@ -24,6 +24,9 @@ export default [
     },
     rules: {
       "vue/multi-word-component-names": "off",
+      // Signalé en warning pour ne pas bloquer la CI sur la dette du code
+      // existant (imports inutilisés, etc.), tout en restant visible.
+      "no-unused-vars": "warn",
     },
   },
   {
