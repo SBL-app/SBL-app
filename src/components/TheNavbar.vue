@@ -2,30 +2,40 @@
 import { RouterLink } from "vue-router";
 </script>
 <template>
-  <div class="nav">
-    <RouterLink to="/home">
+  <nav class="nav" aria-label="Navigation principale">
+    <RouterLink to="/home" aria-label="Accueil — Splatoon Baguette League">
       <div class="logo">
-        <div class="logo-sbl"></div>
+        <div class="logo-sbl" role="img" aria-label="Logo Splatoon Baguette League"></div>
         <div class="logo-text">
           <p>Splatoon Baguette League</p>
         </div>
       </div>
     </RouterLink>
     <div class="links">
-      <RouterLink to="/home">Home</RouterLink>
-      <RouterLink to="/seasons">saisons</RouterLink>
-      <RouterLink to="/events">évènements</RouterLink>
-      <RouterLink to="/teams">équipes</RouterLink>
+      <RouterLink to="/home">Accueil</RouterLink>
+      <RouterLink to="/seasons">Saisons</RouterLink>
+      <RouterLink to="/events">Évènements</RouterLink>
+      <RouterLink to="/teams">Équipes</RouterLink>
     </div>
     <div class="socials">
-      <a href="https://discord.gg/SJgnEYQwcV"> <!-- TODO : check the link -->
-        <div class="discord-logo"></div>
+      <a
+        href="https://discord.gg/SJgnEYQwcV"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Rejoindre le serveur Discord (nouvel onglet)"
+      >
+        <div class="discord-logo" aria-hidden="true"></div>
       </a>
-      <a href="https://x.com/sbaguetteleague">
-        <div class="x-logo"></div>
+      <a
+        href="https://x.com/sbaguetteleague"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Suivre la ligue sur X (nouvel onglet)"
+      >
+        <div class="x-logo" aria-hidden="true"></div>
       </a>
     </div>
-  </div>
+  </nav>
 </template>
 <style scoped>
 .nav {
