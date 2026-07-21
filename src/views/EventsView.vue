@@ -93,7 +93,10 @@ onBeforeMount(() => {
   display: flex;
   padding: 12px 24px;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 32px;
+  max-width: 100%;
   border-radius: 8px;
   background: var(--embed-color-1, #5c47e0);
 }
@@ -105,10 +108,11 @@ onBeforeMount(() => {
   background: var(--background, #190d3f);
 }
 .event-container {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   gap: 34px;
+  max-width: 100%;
 }
 .title {
   text-decoration: underline;
@@ -120,5 +124,18 @@ p {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+}
+
+@media (max-width: 640px) {
+  .event-item {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  p {
+    font-size: 17px;
+  }
 }
 </style>

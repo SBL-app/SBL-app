@@ -242,4 +242,53 @@ results-table thead {
   border-radius: 20px;
   background: var(--embed-color-2, #190d3f);
 }
+
+@media (max-width: 768px) {
+  .players-cards {
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .team,
+  .captain {
+    width: 100%;
+    padding: 16px;
+  }
+
+  p,
+  td,
+  th {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Le tableau de résultats défile dans son conteneur au lieu d'élargir la page. */
+  .result {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .results-table {
+    margin: 12px 0;
+    padding: 16px;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 10px 8px;
+    font-size: 15px;
+  }
+
+  .stat {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .stat-title {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
 </style>

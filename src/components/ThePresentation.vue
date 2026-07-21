@@ -30,17 +30,18 @@ onBeforeMount(() => {
   flex-direction: column;
   align-items: center;
   gap: 26px;
+  width: 100%;
 }
 
 .title {
   text-decoration-line: underline;
 }
 
+/* Bloc de texte classique : `display: flex` transformait le paragraphe en
+   conteneur flex et cassait l'alignement/justification du texte. */
 .text {
-  display: flex;
-  flex-wrap: wrap;
   max-width: 1000px;
-  text-align: center;
+  width: 100%;
 }
 
 p {

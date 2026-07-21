@@ -20,6 +20,18 @@ import TheNavbar from "./components/TheNavbar.vue";
   z-index: 1000;
 }
 
+/* `main` prend toute la largeur et centre lui-même son contenu : sans ça, il se
+   réduisait à la largeur de son plus large enfant et débordait des deux côtés. */
+main {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(32px, 5vw, 56px);
+  padding: 0 16px clamp(32px, 6vw, 64px);
+}
+
 /* Lien d'évitement (RGAA 12.7 / OPQUAST) : visible uniquement au focus clavier. */
 .skip-link {
   position: absolute;

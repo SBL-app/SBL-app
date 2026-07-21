@@ -58,8 +58,22 @@
   font-weight: normal;
 }
 
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+html {
+  /* Empêche iOS d'agrandir la police en paysage. */
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   min-height: 100vh;
+  /* Filet de sécurité : aucun défilement horizontal sur mobile. */
+  overflow-x: hidden;
   color: var(--color-text);
   background: var(--color-background);
   transition:

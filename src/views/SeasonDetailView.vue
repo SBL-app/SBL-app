@@ -105,6 +105,7 @@ onBeforeMount(() => {
 
 .team-names {
   width: 280px;
+  overflow-wrap: anywhere;
 }
 
 .titles,
@@ -148,9 +149,44 @@ onBeforeMount(() => {
   display: flex;
   padding: 12px 24px;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 32px;
+  max-width: 100%;
   border-radius: 8px;
   background: var(--embed-color-1, #5c47e0);
+}
+
+@media (max-width: 640px) {
+  .event {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  /* Le classement garde ses colonnes : si elles ne tiennent pas, c'est la carte
+     qui défile horizontalement, pas la page entière. */
+  .division {
+    width: 100%;
+    align-items: stretch;
+    overflow-x: auto;
+  }
+
+  .titles,
+  .team-item {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .team-names {
+    width: 170px;
+    flex-shrink: 0;
+  }
+
+  p {
+    font-size: 17px;
+  }
 }
 
 .division-focus {
@@ -158,6 +194,7 @@ onBeforeMount(() => {
   flex-direction: column;
   align-items: center;
   gap: 27px;
+  width: 100%;
   background: var(--embed-color-2, #190d3f);
 }
 
