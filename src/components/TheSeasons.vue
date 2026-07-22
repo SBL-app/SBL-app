@@ -1,11 +1,15 @@
 <script setup>
-import { onBeforeMount } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 import { storeToRefs } from "pinia";
 import { useSeasonStore } from "@/stores/seasons";
+import { sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
 const { fetchAllSeasons } = seasonStore;
 const { seasons } = storeToRefs(seasonStore);
+
+// De la plus récente à la plus ancienne.
+const sortedSeasons = computed(() => sortSeasonsByRecent(seasons.value));
 
 onBeforeMount(() => {
   fetchAllSeasons();
@@ -24,7 +28,7 @@ function progressStyle(percentage) {
       <router-link
         :to="{ name: 'season', params: { id: season.id } }"
         class="season-card glass-card"
-        v-for="season in seasons"
+        v-for="season in sortedSeasons"
         :key="season.id"
       >
         <p class="season-name">{{ season.name }}</p>
@@ -64,7 +68,10 @@ function progressStyle(percentage) {
 
 .seasons {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /* Toutes les rangées à la même hauteur : deux cartes de lignes différentes
+     gardent une taille identique. */
+  grid-auto-rows: 1fr;
   gap: 20px;
   width: 100%;
   max-width: 900px;
@@ -74,16 +81,27 @@ function progressStyle(percentage) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 16px;
   padding: 24px 20px;
+  height: 100%;
   text-decoration: none;
 }
 
+/* Deux lignes réservées au nom : un titre court garde la même hauteur de carte
+   qu'un titre long. Rognage visuel uniquement, texte complet pour les lecteurs
+   d'écran. */
 .season-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 2.6em;
   color: var(--text-primary);
   font-size: 16px;
   font-weight: 700;
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .progress-wrapper {

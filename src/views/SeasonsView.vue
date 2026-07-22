@@ -4,6 +4,7 @@ import { useSeasonStore } from "@/stores/seasons";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
+import { sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
 const { fetchAllSeasons } = seasonStore;
@@ -13,15 +14,12 @@ onBeforeMount(() => {
   fetchAllSeasons();
 });
 
-const oldSeasons = computed(() => {
-  return seasons.value.slice(0, -1);
-});
+// De la plus récente à la plus ancienne : la première est la saison en cours.
+const sortedSeasons = computed(() => sortSeasonsByRecent(seasons.value));
 
-const lastSeason = computed(() => {
-  return seasons.value.length > 0
-    ? seasons.value[seasons.value.length - 1]
-    : null;
-});
+const oldSeasons = computed(() => sortedSeasons.value.slice(1));
+
+const lastSeason = computed(() => sortedSeasons.value[0] ?? null);
 
 function progressStyle(percentage) {
   return { width: percentage + "%" };
