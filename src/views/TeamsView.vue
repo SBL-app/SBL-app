@@ -54,6 +54,23 @@ p {
   gap: 20px;
   width: 80%;
 }
+
+@media (max-width: 768px) {
+  .teams {
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .team {
+    padding: 16px;
+  }
+
+  p {
+    font-size: 17px;
+    overflow-wrap: anywhere;
+  }
+}
 .team {
   display: flex;
   padding: 24px;

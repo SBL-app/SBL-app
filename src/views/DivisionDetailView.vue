@@ -229,7 +229,86 @@ router-link {
   flex-direction: column;
   align-items: center;
   gap: 54px;
+  width: 100%;
   background: var(--background, #190d3f);
+}
+
+@media (max-width: 900px) {
+  p,
+  router-link {
+    font-size: 18px;
+  }
+
+  .division-container {
+    width: 100%;
+  }
+
+  /* Le tableau de classement est trop large pour un téléphone : on le fait
+     défiler horizontalement dans sa carte au lieu de déborder de l'écran. */
+  .division-datas {
+    width: 100%;
+    max-width: 100%;
+    align-items: stretch;
+    overflow-x: auto;
+    padding: 19px 16px;
+  }
+
+  .titles,
+  .team {
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+    gap: 12px;
+  }
+
+  .name {
+    width: 150px;
+    flex-shrink: 0;
+    text-align: left;
+  }
+
+  .rank,
+  .victory,
+  .ties,
+  .defeat,
+  .forfeit,
+  .v-round,
+  .l-round,
+  .difference,
+  .points {
+    width: 32px;
+    flex-shrink: 0;
+  }
+
+  .week {
+    width: 100%;
+    padding: 20px 16px;
+  }
+
+  .match {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .team-name {
+    width: auto;
+    max-width: 100%;
+  }
+
+  .planning,
+  .team-container {
+    width: 100%;
+  }
+
+  .team-item {
+    padding: 20px;
+    width: 100%;
+  }
+
+  .members {
+    width: auto;
+    max-width: 100%;
+  }
 }
 .division-container {
   display: flex;

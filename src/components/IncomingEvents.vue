@@ -108,21 +108,38 @@ p {
   display: flex;
   padding: 12px 24px;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 32px;
+  max-width: 100%;
   border-radius: 8px;
   background: var(--embed-color-1, #5c47e0);
 }
 
 .event-container {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   gap: 34px;
+  max-width: 100%;
 }
 
 .dates {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .event {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  p {
+    font-size: 17px;
+  }
 }
 </style>

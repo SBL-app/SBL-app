@@ -201,4 +201,48 @@ results-table thead {
 .results-table tbody tr:last-child td {
   border-bottom: none; /* Supprimer la bordure en bas de la dernière ligne */
 }
+
+@media (max-width: 768px) {
+  .player-container {
+    width: 100%;
+  }
+
+  .player {
+    width: 100%;
+    padding: 16px;
+  }
+
+  p {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Le tableau de résultats défile dans son conteneur au lieu d'élargir la page. */
+  .result {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .results-table {
+    margin: 12px 0;
+    padding: 16px;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 10px 8px;
+    font-size: 15px;
+  }
+
+  .stat {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .stat-title {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
 </style>
