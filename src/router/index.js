@@ -6,6 +6,7 @@ import EventsView from "../views/EventsView.vue";
 import EventDetailView from "../views/EventDetailView.vue";
 import DivisionDetailView from "../views/DivisionDetailView.vue";
 import TeamsView from "@/views/TeamsView.vue";
+import CreateTeamView from "@/views/CreateTeamView.vue";
 import TeamDetailView from "@/views/TeamDetailView.vue";
 import PlayerDetailView from "@/views/PlayerDetailView.vue";
 import { useAuthStore } from "@/stores/auth";
@@ -51,6 +52,12 @@ const router = createRouter({
       path: "/teams",
       name: "teams",
       component: TeamsView,
+    },
+    {
+      path: "/teams/create",
+      name: "team-create",
+      component: CreateTeamView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/team/:id",

@@ -1,12 +1,14 @@
 <script setup>
 import { onBeforeMount } from "vue";
 import { useTeamStore } from "@/stores/team";
+import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from "pinia";
 import { RouterLink } from "vue-router";
 
 const teamStore = useTeamStore();
 const { fetchAllTeams } = teamStore;
 const { teams } = storeToRefs(teamStore);
+const auth = useAuthStore();
 
 onBeforeMount(() => {
   fetchAllTeams();
@@ -14,7 +16,16 @@ onBeforeMount(() => {
 </script>
 <template>
   <div class="page-wrapper">
-    <p class="section-label">Équipes</p>
+    <div class="teams-header">
+      <p class="section-label">Équipes</p>
+      <RouterLink
+        v-if="auth.isAuthenticated"
+        class="btn-create"
+        :to="{ name: 'team-create' }"
+      >
+        + Créer une équipe
+      </RouterLink>
+    </div>
     <div class="teams-grid">
       <RouterLink
         class="team-card glass-card"
@@ -31,6 +42,32 @@ onBeforeMount(() => {
   </div>
 </template>
 <style scoped>
+.teams-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.btn-create {
+  background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.btn-create:hover {
+  opacity: 0.9;
+}
+
 .teams-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
