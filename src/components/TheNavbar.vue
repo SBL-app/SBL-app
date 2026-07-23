@@ -40,14 +40,6 @@ const {
 onMounted(() => {
   checkSubscriptionStatus();
 });
-
-function toggleNotifications() {
-  if (isSubscribed.value) {
-    unsubscribe();
-  } else {
-    subscribe();
-  }
-}
 </script>
 <template>
   <nav class="nav" aria-label="Navigation principale">
@@ -121,7 +113,7 @@ function toggleNotifications() {
           :class="{ active: isSubscribed, loading: isLoading }"
           :aria-label="isSubscribed ? 'Désactiver les notifications' : 'Activer les notifications'"
           :disabled="isLoading"
-          @click="toggleNotifications"
+          @click="isSubscribed ? unsubscribe() : subscribe()"
         >
           <svg v-if="!isSubscribed" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
