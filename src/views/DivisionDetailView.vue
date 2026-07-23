@@ -1,17 +1,24 @@
 <script setup>
 import { useRoute, RouterLink } from "vue-router";
 import { useDivisionStore } from "@/stores/division";
+import { useGameStore } from "@/stores/game";
+import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, watch, ref } from "vue";
 
 const route = useRoute();
 const divisionStore = useDivisionStore();
+const gameStore = useGameStore();
+const auth = useAuthStore();
 const { fetchDivisionDetails } = divisionStore;
 
 const divisionData = ref(null);
 const ranking = ref([]);
 const teams = ref([]);
 const games = ref([]);
+
+const reportingGameId = ref(null);
+const reportError = ref("");
 
 async function loadData(id) {
   try {
@@ -22,6 +29,28 @@ async function loadData(id) {
     games.value = data.games;
   } catch (error) {
     console.error('Erreur lors du chargement des détails de la division:', error);
+  }
+}
+
+async function handleReport(game) {
+  reportError.value = "";
+  const confirmed = window.confirm(
+    `Reporter le match ${game.team1} vs ${game.team2} ? (1 report par équipe et par saison)`
+  );
+  if (!confirmed) return;
+
+  const reason = window.prompt("Motif du report (optionnel) :") || "";
+
+  reportingGameId.value = game.id;
+  try {
+    await gameStore.reportGame(game.id, reason);
+    await loadData(route.params.id);
+  } catch (e) {
+    reportError.value =
+      "Le report a échoué : vous devez être capitaine de l'une des équipes et ne pas avoir dépassé la limite de reports.";
+    console.error(e);
+  } finally {
+    reportingGameId.value = null;
   }
 }
 
@@ -103,11 +132,20 @@ function formatDate(dateStr) {
                 class="status-badge"
                 :class="game.status === 'joué' ? 'done' : game.status === 'prévu' ? 'scheduled' : 'cancelled'"
               >{{ game.status }}</span>
+              <button
+                v-if="auth.isAuthenticated && game.status === 'prévu'"
+                class="btn-report"
+                :disabled="reportingGameId === game.id"
+                @click="handleReport(game)"
+              >
+                {{ reportingGameId === game.id ? "…" : "Reporter" }}
+              </button>
             </div>
           </div>
         </div>
       </div>
-      <p v-else class="empty-msg">Aucun match prévu</p>
+      <p v-if="reportError" class="schedule-error">{{ reportError }}</p>
+      <p v-if="games.length === 0" class="empty-msg">Aucun match prévu</p>
     </div>
 
     <!-- Équipes -->
@@ -232,6 +270,34 @@ function formatDate(dateStr) {
 }
 
 .pts { color: var(--text-primary); font-weight: 700; }
+
+.btn-report {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-report:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.btn-report:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.schedule-error {
+  font-size: 13px;
+  color: #ef4444;
+  text-align: center;
+}
 
 .planning-list {
   display: flex;
