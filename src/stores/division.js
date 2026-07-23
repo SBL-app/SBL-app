@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import ky from "ky";
 import { API_URL } from "../../API_URL";
+import { useAuthStore } from "@/stores/auth";
 
 export const useDivisionStore = defineStore("divisions", () => {
   const divisions = ref([]);
@@ -36,6 +37,20 @@ export const useDivisionStore = defineStore("divisions", () => {
     return data;
   };
 
+  /**
+   * Génère le planning de matchs d'une division.
+   * @param {number|string} divisionId
+   * @param {{type: string, status_id: number, start_date?: string, days_between_weeks?: number}} options
+   * @returns {Promise<object>}
+   */
+  const generateSchedule = async (divisionId, options) => {
+    const auth = useAuthStore();
+    const response = await auth.api.post(`divisions/${divisionId}/schedule`, {
+      json: options,
+    });
+    return await response.json();
+  };
+
   return {
     divisions,
     division,
@@ -43,5 +58,6 @@ export const useDivisionStore = defineStore("divisions", () => {
     fetchDivisionBySeason,
     fetchDivision,
     fetchDivisionDetails,
+    generateSchedule,
   };
 })
