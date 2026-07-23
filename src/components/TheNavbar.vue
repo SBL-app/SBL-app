@@ -4,28 +4,41 @@ import { RouterLink, useRouter } from "vue-router";
 import TheSearchDropdown from "./TheSearchDropdown.vue";
 
 const searchOpen = ref(false);
+const menuOpen = ref(false);
 const router = useRouter();
 
+// Recherche et menu mobile se referment à chaque changement de page.
 router.afterEach(() => {
   searchOpen.value = false;
+  menuOpen.value = false;
 });
 </script>
 <template>
-  <div class="nav">
-    <RouterLink to="/home" class="logo-link">
+  <nav class="nav" aria-label="Navigation principale">
+    <RouterLink to="/home" class="logo-link" aria-label="Accueil — Splatoon Baguette League">
       <div class="logo">
-        <div class="logo-sbl"></div>
+        <div class="logo-sbl" role="img" aria-label="Logo Splatoon Baguette League"></div>
         <div class="logo-text">
           <p>Splatoon Baguette League</p>
         </div>
       </div>
     </RouterLink>
-    <div class="links">
+
+    <div class="links" id="nav-links" :class="{ open: menuOpen }">
       <RouterLink to="/home">Home</RouterLink>
       <RouterLink to="/seasons">saisons</RouterLink>
       <RouterLink to="/events">évènements</RouterLink>
       <RouterLink to="/teams">équipes</RouterLink>
+      <div class="socials socials-in-menu">
+        <a href="https://discord.gg/SJgnEYQwcV" target="_blank" rel="noopener noreferrer" aria-label="Rejoindre le serveur Discord (nouvel onglet)">
+          <div class="discord-logo" aria-hidden="true"></div>
+        </a>
+        <a href="https://x.com/sbaguetteleague" target="_blank" rel="noopener noreferrer" aria-label="Suivre la ligue sur X (nouvel onglet)">
+          <div class="x-logo" aria-hidden="true"></div>
+        </a>
+      </div>
     </div>
+
     <div class="nav-right">
       <div class="search-wrapper">
         <button
@@ -40,16 +53,28 @@ router.afterEach(() => {
         </button>
         <TheSearchDropdown v-if="searchOpen" @close="searchOpen = false" />
       </div>
-      <div class="socials">
-        <a href="https://discord.gg/SJgnEYQwcV">
-          <div class="discord-logo"></div>
+      <div class="socials socials-desktop">
+        <a href="https://discord.gg/SJgnEYQwcV" target="_blank" rel="noopener noreferrer" aria-label="Rejoindre le serveur Discord (nouvel onglet)">
+          <div class="discord-logo" aria-hidden="true"></div>
         </a>
-        <a href="https://x.com/sbaguetteleague">
-          <div class="x-logo"></div>
+        <a href="https://x.com/sbaguetteleague" target="_blank" rel="noopener noreferrer" aria-label="Suivre la ligue sur X (nouvel onglet)">
+          <div class="x-logo" aria-hidden="true"></div>
         </a>
       </div>
+      <button
+        type="button"
+        class="burger"
+        :aria-expanded="menuOpen"
+        aria-controls="nav-links"
+        :aria-label="menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'"
+        @click="menuOpen = !menuOpen"
+      >
+        <span class="burger-bar" :class="{ open: menuOpen }"></span>
+        <span class="burger-bar" :class="{ open: menuOpen }"></span>
+        <span class="burger-bar" :class="{ open: menuOpen }"></span>
+      </button>
     </div>
-  </div>
+  </nav>
 </template>
 <style scoped>
 .nav {
@@ -207,5 +232,109 @@ router.afterEach(() => {
   width: 20px;
   height: 20px;
   background: url(/img/x-logo.png) center / cover no-repeat;
+}
+
+/* Les socials du menu déroulant n'apparaissent qu'en mobile. */
+.socials-in-menu {
+  display: none;
+}
+
+/* Bouton hamburger : masqué sur grand écran. */
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.burger-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--text-secondary);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.burger-bar.open:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.burger-bar.open:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-bar.open:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.burger:focus-visible,
+.search-btn:focus-visible,
+.links a:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .burger {
+    display: flex;
+  }
+
+  .socials-desktop {
+    display: none;
+  }
+
+  /* Le logo peut rétrécir pour laisser la place à la recherche + hamburger. */
+  .logo-link {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .logo-text p {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Panneau déroulant plein largeur sous la barre, plutôt que des liens qui
+     débordent horizontalement. */
+  .links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 12px 24px 20px;
+    background: rgba(8, 8, 15, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-card);
+  }
+
+  .links.open {
+    display: flex;
+  }
+
+  .links a {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+  }
+
+  .socials-in-menu {
+    display: flex;
+    padding-top: 12px;
+  }
 }
 </style>

@@ -5,14 +5,14 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount } from "vue";
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
+import { sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
 const { fetchAllSeasons } = seasonStore;
 const { seasons } = storeToRefs(seasonStore);
 
-const oldSeasons = computed(() => {
-  return seasons.value.slice(0, -1);
-});
+// Anciens évènements = toutes les saisons sauf la plus récente, triées.
+const oldSeasons = computed(() => sortSeasonsByRecent(seasons.value).slice(1));
 
 onBeforeMount(() => {
   fetchAllSeasons();

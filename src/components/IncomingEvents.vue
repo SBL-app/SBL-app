@@ -2,14 +2,14 @@
 import { computed, onBeforeMount } from "vue";
 import { useSeasonStore } from "@/stores/seasons";
 import { storeToRefs } from "pinia";
+import { sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
 const { fetchAllSeasons } = seasonStore;
 const { seasons } = storeToRefs(seasonStore);
 
-const lastSeason = computed(() => {
-  return seasons.value.length > 0 ? seasons.value[seasons.value.length - 1] : null;
-});
+// La saison la plus récente (et non le dernier élément du tableau brut).
+const lastSeason = computed(() => sortSeasonsByRecent(seasons.value)[0] ?? null);
 
 onBeforeMount(() => {
   fetchAllSeasons();
