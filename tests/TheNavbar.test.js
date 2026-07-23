@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
+import { createPinia } from "pinia";
 import TheNavbar from "../src/components/TheNavbar.vue";
 
 // Stub minimal de RouterLink (rendu en <a>) pour tester le composant isolément.
@@ -9,8 +10,13 @@ const RouterLinkStub = {
 };
 
 function mountNavbar() {
+  // La navbar utilise le store d'authentification (Pinia) : on installe une
+  // instance fraîche par montage pour l'isoler.
   return mount(TheNavbar, {
-    global: { stubs: { RouterLink: RouterLinkStub } },
+    global: {
+      plugins: [createPinia()],
+      stubs: { RouterLink: RouterLinkStub },
+    },
   });
 }
 
