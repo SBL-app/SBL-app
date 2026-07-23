@@ -8,6 +8,7 @@ import DivisionDetailView from "../views/DivisionDetailView.vue";
 import TeamsView from "@/views/TeamsView.vue";
 import TeamDetailView from "@/views/TeamDetailView.vue";
 import PlayerDetailView from "@/views/PlayerDetailView.vue";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,6 +67,17 @@ const router = createRouter({
       redirect: "/home",
     }
   ],
+});
+
+// Route guard : redirige vers /home avec un paramètre login=required
+// pour les routes marquées meta.requiresAuth
+router.beforeEach((to) => {
+  if (to.meta.requiresAuth) {
+    const auth = useAuthStore();
+    if (!auth.isAuthenticated) {
+      return { name: "home", query: { login: "required", redirect: to.fullPath } };
+    }
+  }
 });
 
 export default router;
