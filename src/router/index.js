@@ -6,8 +6,10 @@ import EventsView from "../views/EventsView.vue";
 import EventDetailView from "../views/EventDetailView.vue";
 import DivisionDetailView from "../views/DivisionDetailView.vue";
 import TeamsView from "@/views/TeamsView.vue";
+import CreateTeamView from "@/views/CreateTeamView.vue";
 import TeamDetailView from "@/views/TeamDetailView.vue";
 import PlayerDetailView from "@/views/PlayerDetailView.vue";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +54,12 @@ const router = createRouter({
       component: TeamsView,
     },
     {
+      path: "/teams/create",
+      name: "team-create",
+      component: CreateTeamView,
+      meta: { requiresAuth: true },
+    },
+    {
       path: "/team/:id",
       name: "team",
       component: TeamDetailView,
@@ -66,6 +74,17 @@ const router = createRouter({
       redirect: "/home",
     }
   ],
+});
+
+// Route guard : redirige vers /home avec un paramètre login=required
+// pour les routes marquées meta.requiresAuth
+router.beforeEach((to) => {
+  if (to.meta.requiresAuth) {
+    const auth = useAuthStore();
+    if (!auth.isAuthenticated) {
+      return { name: "home", query: { login: "required", redirect: to.fullPath } };
+    }
+  }
 });
 
 export default router;

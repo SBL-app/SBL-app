@@ -8,24 +8,30 @@ export const useTeamStatStore = defineStore("teamStats", () => {
   const teamStat = ref({});
 
   const fetchAllTeamStats = async () => {
-    const response = await ky.get(`${API_URL}/teamStats`);
+    const response = await ky.get(`${API_URL}/team-stats`);
     teamStats.value = await response.json();
   };
 
   const fetchTeamStatByTeamId = async (teamId) => {
-    const response = await ky.get(`${API_URL}/teamStats/${teamId}`);
+    const response = await ky.get(`${API_URL}/team-stats`, {
+      searchParams: { team_id: teamId }
+    });
     teamStats.value = await response.json();
   };
 
   const fetchTeamStatByDivisionId = async (divisionId) => {
-    const response = await ky.get(`${API_URL}/teamStats/division/${divisionId}`);
+    const response = await ky.get(`${API_URL}/team-stats`, {
+      searchParams: { division_id: divisionId }
+    });
     teamStats.value = await response.json();
 
     teamStats.value.sort((a, b) => b.points - a.points);
   }
 
   const fetchTeamStatByteamIdAndDivisionId = async (teamId, divisionId) => {
-    const response = await ky.get(`${API_URL}/teamStat/${teamId}/${divisionId}`);
+    const response = await ky.get(`${API_URL}/team-stats`, {
+      searchParams: { team_id: teamId, division_id: divisionId }
+    });
     teamStat.value = await response.json();
   }
 

@@ -6,14 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "preview": "vite preview"
   },
   "dependencies": {
     "ky": "^1.4.0",
@@ -22,18 +15,10 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.31.0",
+    "@vite-pwa/assets-generator": "^1.0.2",
     "@vitejs/plugin-vue": "^5.0.4",
-    "@vitest/coverage-v8": "^2.1.9",
-    "@vue/server-renderer": "^3.4.21",
-    "@vue/test-utils": "^2.4.6",
-    "eslint": "^9.31.0",
-    "eslint-plugin-vue": "^9.28.0",
-    "eslint-plugin-vuejs-accessibility": "^2.4.1",
-    "globals": "^15.14.0",
-    "happy-dom": "^15.11.7",
-    "prettier": "^3.4.2",
     "vite": "^6.4.1",
-    "vitest": "^2.1.9"
+    "vite-plugin-pwa": "^1.2.0",
+    "workbox-precaching": "^7.4.0"
   }
 }

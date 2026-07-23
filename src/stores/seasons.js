@@ -9,23 +9,24 @@ export const useSeasonStore = defineStore("seasons", () => {
 
   const fetchAllSeasons = async () => {
     const response = await ky.get(`${API_URL}/seasons`);
-    seasons.value = await response.json();
+      seasons.value = await response.json();
   };
 
   const fetchSeason = async (id) => {
-    const response = await ky.get(`${API_URL}/season/${id}`);
-    season.value = await response.json();
+    const response = await ky.get(`${API_URL}/seasons/${id}`);
+      season.value = await response.json();
   };
 
   const fetchSeasonPercentage = async (id) => {
-    const response = await ky.get(`${API_URL}/season/${id}/percent`);
-    season.value = await response.json();
+    const response = await ky.get(`${API_URL}/seasons/${id}/completion`);
+      season.value = await response.json();
   }
 
   const fetchTeamsBySeason = async (id) => {
-    const response = await ky.get(`${API_URL}/season/${id}/teams`);
-    season.value = await response.json();
+    const response = await ky.get(`${API_URL}/seasons/${id}/teams`);
+      season.value = await response.json();
   }
+
   return {
     seasons,
     season,

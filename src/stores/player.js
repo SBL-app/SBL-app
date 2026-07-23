@@ -13,12 +13,14 @@ export const usePlayerStore = defineStore("players", () => {
   };
 
   const fetchPlayersByTeam = async (teamId) => {
-    const response = await ky.get(`${API_URL}/players/${teamId}`);
+    const response = await ky.get(`${API_URL}/players`, {
+      searchParams: { team_id: teamId }
+    });
     players.value = await response.json();
   }
 
   const fetchPlayer = async (id) => {
-    const response = await ky.get(`${API_URL}/player/${id}`);
+    const response = await ky.get(`${API_URL}/players/${id}`);
     player.value = await response.json();
   };
 

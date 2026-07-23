@@ -12,159 +12,137 @@ const { seasons } = storeToRefs(seasonStore);
 
 onBeforeMount(() => {
   fetchAllSeasons();
-  console.log("seasons view");
 });
 
 // De la plus récente à la plus ancienne : la première est la saison en cours.
 const sortedSeasons = computed(() => sortSeasonsByRecent(seasons.value));
 
-const oldSeasons = computed(() => {
-  return sortedSeasons.value.slice(1);
-});
+const oldSeasons = computed(() => sortedSeasons.value.slice(1));
 
-const lastSeason = computed(() => {
-  return sortedSeasons.value[0] ?? null;
-});
+const lastSeason = computed(() => sortedSeasons.value[0] ?? null);
 
 function progressStyle(percentage) {
-  let color;
-  if (percentage < 30) {
-    color = "#ff4d4d"; // Rouge
-  } else if (percentage < 70) {
-    color = "#ffcc00"; // Jaune
-  } else {
-    color = "#76c7c0"; // Vert
-  }
-  return {
-    width: percentage + "%",
-    backgroundColor: color,
-  };
+  return { width: percentage + "%" };
 }
 </script>
 <template>
-  <div class="lastSeason">
-    <div class="season-container">
-      <p class="title">dernière saison :</p>
-      <div class="seasons">
+  <div class="page-wrapper">
+    <div class="section">
+      <p class="section-label">Saison en cours</p>
+      <div class="seasons-grid single" v-if="lastSeason">
         <router-link
-          v-if="lastSeason"
           :to="{ name: 'season', params: { id: lastSeason.id } }"
-          class="season-item"
+          class="season-card glass-card featured"
         >
-          <p class="item-title">{{ lastSeason.name }}</p>
-          <p class="test">{{ lastSeason.percentage }}%</p>
-          <div class="progressbar">
-            <div
-              class="progress"
-              :style="progressStyle(lastSeason.percentage)"
-            ></div>
+          <p class="season-name">{{ lastSeason.name }}</p>
+          <div class="progress-wrapper">
+            <div class="progress-track">
+              <div class="progress-fill" :style="progressStyle(lastSeason.percentage)"></div>
+            </div>
+            <span class="progress-pct">{{ lastSeason.percentage }}%</span>
           </div>
-          <p class="item-status">
+          <span class="status-badge" :class="Number(lastSeason.percentage) === 100 ? 'done' : 'active'">
             {{ Number(lastSeason.percentage) === 100 ? "terminé" : "en cours" }}
-          </p>
+          </span>
         </router-link>
       </div>
+      <p v-else class="empty-msg">Aucune saison en cours</p>
     </div>
-  </div>
-  <div class="oldSeasons">
-    <div class="season-container">
-      <p class="title">anciennes saisons :</p>
-      <div class="seasons" v-if="oldSeasons">
+
+    <hr class="gradient-divider" />
+
+    <div class="section" v-if="oldSeasons.length > 0">
+      <p class="section-label">Saisons précédentes</p>
+      <div class="seasons-grid">
         <router-link
           v-for="season in oldSeasons"
           :key="season.id"
           :to="{ name: 'season', params: { id: season.id } }"
-          class="season-item"
+          class="season-card glass-card"
         >
-          <p class="item-title">{{ season.name }}</p>
-          <p class="test">{{ season.percentage }}%</p>
-          <div class="progressbar">
-            <div
-              class="progress"
-              :style="progressStyle(season.percentage)"
-            ></div>
+          <p class="season-name">{{ season.name }}</p>
+          <div class="progress-wrapper">
+            <div class="progress-track">
+              <div class="progress-fill" :style="progressStyle(season.percentage)"></div>
+            </div>
+            <span class="progress-pct">{{ season.percentage }}%</span>
           </div>
-          <p class="item-status">
-            {{ Number(season.percentage) === 100 ? "terminé" : "en cours" }}
-          </p>
+          <span class="status-badge done">terminé</span>
         </router-link>
       </div>
     </div>
   </div>
 </template>
 <style scoped>
-.season-container {
+.section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 26px;
+  gap: 20px;
   width: 100%;
 }
-/* Grille à pistes identiques : toutes les cartes ont la même largeur, et
-   `stretch` (par défaut en grid) leur donne la même hauteur. */
-.seasons {
+
+.seasons-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
-  /* Toutes les rangées à la même hauteur : deux cartes de lignes différentes
-     restent identiques. */
-  grid-auto-rows: 1fr;
-  justify-content: center;
-  gap: clamp(16px, 5vw, 80px);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
   width: 100%;
 }
 
-.season-item {
+.seasons-grid.single {
+  max-width: 320px;
+}
+
+.season-card {
   display: flex;
-  padding: 24px;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 8px;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  background: var(--embed-color-1, #5c47e0);
+  gap: 16px;
+  padding: 24px 20px;
+  text-decoration: none;
 }
 
-/* Le nom occupe exactement deux lignes, quelle que soit sa longueur : c'est ce
-   qui garantit des cartes de taille identique d'une grille à l'autre. Le texte
-   n'est tronqué que visuellement, il reste entier pour les lecteurs d'écran. */
-.item-title {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 2.6em;
-  overflow-wrap: anywhere;
+.season-card.featured {
+  border-color: var(--border-card-featured);
 }
 
-.title {
-  text-decoration: underline;
-}
-
-p {
-  color: #fff;
+.season-name {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 700;
   text-align: center;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
 }
 
-.progressbar {
-  width: 160px;
-  max-width: 100%;
-  height: 9px;
+.progress-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.progress-pct {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.progress-track {
+  width: 100%;
+  height: 6px;
   border-radius: 99px;
-  background: #e0e0e0;
-  position: relative;
+  background: var(--surface-subtle, rgba(255, 255, 255, 0.08));
+  overflow: hidden;
 }
 
-.progress {
+.progress-fill {
   height: 100%;
   border-radius: 99px;
-  position: absolute;
-  top: 0;
-  left: 0;
+  background: linear-gradient(90deg, var(--accent-violet), var(--accent-cyan));
+}
+
+.empty-msg {
+  color: var(--text-secondary);
+  font-size: 15px;
 }
 </style>
