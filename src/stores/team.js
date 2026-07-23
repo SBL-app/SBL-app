@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import ky from "ky";
 import { API_URL } from "../../API_URL";
+import { useAuthStore } from "@/stores/auth";
 
 export const useTeamStore = defineStore("teams", () => {
   const teams = ref([]);
@@ -36,6 +37,33 @@ export const useTeamStore = defineStore("teams", () => {
     return data;
   };
 
+  /**
+   * Crée une équipe dont l'utilisateur authentifié devient capitaine.
+   * @param {string} name
+   * @returns {Promise<object>} l'équipe créée (avec son id)
+   */
+  const createTeam = async (name) => {
+    const auth = useAuthStore();
+    const response = await auth.api.post("teams", {
+      json: { name, captain: true },
+    });
+    return await response.json();
+  };
+
+  /**
+   * Ajoute un joueur (roster) à une équipe dont l'utilisateur est capitaine.
+   * @param {number|string} teamId
+   * @param {{name: string, discord?: string}} player
+   * @returns {Promise<object>}
+   */
+  const addPlayer = async (teamId, player) => {
+    const auth = useAuthStore();
+    const response = await auth.api.post(`teams/${teamId}/players`, {
+      json: { name: player.name, discord: player.discord || null },
+    });
+    return await response.json();
+  };
+
   return {
     teams,
     team,
@@ -43,5 +71,7 @@ export const useTeamStore = defineStore("teams", () => {
     fetchTeam,
     fetchTeamsByDivision,
     fetchTeamDetails,
+    createTeam,
+    addPlayer,
   };
 });
