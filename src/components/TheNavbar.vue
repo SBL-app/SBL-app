@@ -1,18 +1,45 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { RouterLink, useRoute } from "vue-router";
+import { useAuthStore } from "../stores/auth";
+import { API_URL } from "../../API_URL";
+import TheSearchDropdown from "./TheSearchDropdown.vue";
+import TheUserMenu from "./TheUserMenu.vue";
+import { usePushNotifications } from "@/composables/usePushNotifications";
 
 // `useRoute()` est indéfini si le composant est monté hors routeur (tests unitaires).
 const route = useRoute();
 const isMenuOpen = ref(false);
+const searchOpen = ref(false);
+const auth = useAuthStore();
 
-// Le menu mobile se referme dès qu'on change de page.
+// Le menu mobile et la recherche se referment dès qu'on change de page.
 watch(
   () => route?.fullPath,
   () => {
     isMenuOpen.value = false;
+    searchOpen.value = false;
   }
 );
+
+const discordLoginUrl = computed(() => {
+  const redirectAfter = encodeURIComponent(window.location.origin);
+  return `${API_URL}/auth/discord?redirect_after=${redirectAfter}`;
+});
+
+const {
+  isSupported,
+  permission,
+  isSubscribed,
+  isLoading,
+  subscribe,
+  unsubscribe,
+  checkSubscriptionStatus,
+} = usePushNotifications();
+
+onMounted(() => {
+  checkSubscriptionStatus();
+});
 </script>
 <template>
   <nav class="nav" aria-label="Navigation principale">
@@ -60,6 +87,49 @@ watch(
         >
           <div class="x-logo" aria-hidden="true"></div>
         </a>
+      </div>
+
+      <div class="nav-actions">
+        <div class="search-wrapper">
+          <button
+            type="button"
+            class="search-btn"
+            :class="{ active: searchOpen }"
+            aria-label="Rechercher"
+            :aria-expanded="searchOpen"
+            @click="searchOpen = !searchOpen"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+            </svg>
+          </button>
+          <TheSearchDropdown v-if="searchOpen" @close="searchOpen = false" />
+        </div>
+
+        <button
+          v-if="isSupported && permission !== 'denied'"
+          type="button"
+          class="notif-btn"
+          :class="{ active: isSubscribed, loading: isLoading }"
+          :aria-label="isSubscribed ? 'Désactiver les notifications' : 'Activer les notifications'"
+          :disabled="isLoading"
+          @click="isSubscribed ? unsubscribe() : subscribe()"
+        >
+          <svg v-if="!isSubscribed" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+        </button>
+
+        <div class="nav-auth">
+          <TheUserMenu v-if="auth.isAuthenticated" />
+          <a v-else :href="discordLoginUrl" class="login-btn">
+            <div class="discord-logo-sm" aria-hidden="true"></div>
+            Se connecter
+          </a>
+        </div>
       </div>
     </div>
   </nav>
@@ -140,6 +210,79 @@ p {
   text-decoration: none;
 }
 
+/* Groupe des contrôles à droite : recherche, notifications, connexion. */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.search-btn,
+.notif-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.search-btn:hover,
+.search-btn.active,
+.notif-btn:hover,
+.notif-btn.active {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #fff;
+}
+
+.notif-btn:disabled,
+.notif-btn.loading {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+}
+
+.login-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(88, 101, 242, 0.25);
+  border: 1px solid rgba(88, 101, 242, 0.6);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.login-btn:hover {
+  background: rgba(88, 101, 242, 0.45);
+  border-color: #5865f2;
+}
+
+.discord-logo-sm {
+  width: 20px;
+  height: 15px;
+  flex-shrink: 0;
+  background: url(img/discord-logo.png) center / cover no-repeat;
+}
+
 /* Bouton hamburger : masqué sur grand écran, seul point d'entrée du menu en mobile. */
 .burger {
   display: none;
@@ -175,7 +318,10 @@ p {
 }
 
 .burger:focus-visible,
-.links a:focus-visible {
+.links a:focus-visible,
+.search-btn:focus-visible,
+.notif-btn:focus-visible,
+.login-btn:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
@@ -248,6 +394,18 @@ p {
   }
 
   .socials a {
+    width: auto;
+  }
+
+  /* Les contrôles (recherche / notif / connexion) passent en ligne dédiée,
+     alignés à gauche comme les liens du menu. */
+  .nav-actions {
+    width: 100%;
+    padding-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .login-btn {
     width: auto;
   }
 }

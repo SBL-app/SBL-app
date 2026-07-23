@@ -38,4 +38,13 @@ export default [
       },
     },
   },
+  {
+    // Service worker : globals spécifiques (self, clients, caches, skipWaiting…).
+    files: ["src/sw.js"],
+    languageOptions: {
+      globals: {
+        ...globals.serviceworker,
+      },
+    },
+  },
 ];

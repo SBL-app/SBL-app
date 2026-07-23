@@ -98,3 +98,27 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* --- Tokens design des composants features (recherche, menu utilisateur, PWA) ---
+   Repris de la refonte "Midnight Pro". Purement additifs : ces variables
+   n'existaient pas dans le thème principal et ne sont référencées que par
+   TheSearchDropdown / TheUserMenu / InstallPrompt. */
+:root {
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --bg-card-hover: rgba(255, 255, 255, 0.07);
+  --accent-violet: #7c3aed;
+  --accent-cyan: #0ea5e9;
+  --border-card: rgba(124, 58, 237, 0.3);
+  --border-card-hover: rgba(14, 165, 233, 0.5);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card);
+  border-radius: 16px;
+}
