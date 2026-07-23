@@ -28,3 +28,8 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Environment variables (contains secrets)
+.env
+
+.superpowers/

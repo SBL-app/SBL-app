@@ -2,6 +2,7 @@
 import { onMounted } from "vue";
 import { useAuthStore } from "./stores/auth";
 import TheNavbar from "./components/TheNavbar.vue";
+import InstallPrompt from "./components/InstallPrompt.vue";
 
 const auth = useAuthStore();
 
@@ -25,4 +26,5 @@ onMounted(() => {
 <template>
   <TheNavbar />
   <router-view />
+  <InstallPrompt />
 </template>
