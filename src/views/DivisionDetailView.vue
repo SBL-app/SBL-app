@@ -1,10 +1,9 @@
 <script setup>
-import { useRoute, RouterLink } from "vue-router";
+import { useRoute } from "vue-router";
 import { useDivisionStore } from "@/stores/division";
 import { useGameStore } from "@/stores/game";
 import { useGameStatusStore } from "@/stores/gameStatus";
 import { useAuthStore } from "@/stores/auth";
-import { storeToRefs } from "pinia";
 import { onBeforeMount, watch, ref, computed } from "vue";
 
 const route = useRoute();

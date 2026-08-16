@@ -1,9 +1,7 @@
 <script setup>
-import { onBeforeMount } from "vue";
+import { computed, onBeforeMount } from "vue";
 import { useSeasonStore } from "@/stores/seasons";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
-import { RouterLink } from "vue-router";
 import { sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
