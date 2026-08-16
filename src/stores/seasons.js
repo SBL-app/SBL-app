@@ -6,10 +6,19 @@ import { API_URL } from "../../API_URL";
 export const useSeasonStore = defineStore("seasons", () => {
   const seasons = ref([]);
   const season = ref({});
+  // Vrai tant que la première requête n'a pas abouti. Permet aux vues
+  // d'afficher un squelette de la taille finale plutôt qu'un bloc vide,
+  // et d'éviter ainsi le décalage de mise en page à l'arrivée des données.
+  const isLoadingSeasons = ref(true);
 
   const fetchAllSeasons = async () => {
-    const response = await ky.get(`${API_URL}/seasons`);
+    isLoadingSeasons.value = true;
+    try {
+      const response = await ky.get(`${API_URL}/seasons`);
       seasons.value = await response.json();
+    } finally {
+      isLoadingSeasons.value = false;
+    }
   };
 
   const fetchSeason = async (id) => {
@@ -30,6 +39,7 @@ export const useSeasonStore = defineStore("seasons", () => {
   return {
     seasons,
     season,
+    isLoadingSeasons,
     fetchAllSeasons,
     fetchSeason,
     fetchSeasonPercentage,

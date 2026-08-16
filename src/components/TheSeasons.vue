@@ -6,7 +6,12 @@ import { sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
 const { fetchAllSeasons } = seasonStore;
-const { seasons } = storeToRefs(seasonStore);
+const { seasons, isLoadingSeasons } = storeToRefs(seasonStore);
+
+// Nombre de cartes fictives affichées pendant le chargement. Elles occupent
+// exactement la même place que les cartes réelles, ce qui évite que l'arrivée
+// des données ne pousse le contenu situé en dessous (BUG-022 : CLS mobile).
+const SKELETON_COUNT = 4;
 
 // De la plus récente à la plus ancienne.
 const sortedSeasons = computed(() => sortSeasonsByRecent(seasons.value));
@@ -24,7 +29,32 @@ function progressStyle(percentage) {
 <template>
   <div class="season-container">
     <p class="section-label">Saisons</p>
-    <div class="seasons" v-if="seasons.length > 0">
+
+    <!-- Squelette de chargement : même grille, mêmes dimensions de carte que
+         le rendu final. L'espace est donc réservé dès le premier affichage. -->
+    <div
+      class="seasons"
+      v-if="isLoadingSeasons"
+      aria-busy="true"
+      aria-live="polite"
+      aria-label="Chargement des saisons"
+    >
+      <div
+        class="season-card glass-card season-card--skeleton"
+        v-for="n in SKELETON_COUNT"
+        :key="`skeleton-${n}`"
+        aria-hidden="true"
+      >
+        <p class="season-name skeleton-block"></p>
+        <div class="progress-wrapper">
+          <div class="progress-track"></div>
+          <span class="progress-pct skeleton-block skeleton-block--pct"></span>
+        </div>
+        <span class="status-badge skeleton-block skeleton-block--badge"></span>
+      </div>
+    </div>
+
+    <div class="seasons" v-else-if="seasons.length > 0">
       <router-link
         :to="{ name: 'season', params: { id: season.id } }"
         class="season-card glass-card"
@@ -56,6 +86,10 @@ function progressStyle(percentage) {
   align-items: center;
   gap: 24px;
   width: 100%;
+  /* Hauteur plancher correspondant au libellé de section et à une rangée de
+     cartes. Garantit que le bloc n'est jamais plus petit que son rendu final,
+     même dans l'état vide (BUG-022). */
+  min-height: 260px;
 }
 
 .section-label {
@@ -136,5 +170,55 @@ function progressStyle(percentage) {
 .empty-msg {
   color: var(--text-secondary);
   font-size: 16px;
+}
+
+/* ---------------------------------------------------------------------------
+   Squelette de chargement (BUG-022)
+   Les cartes fictives reprennent la géométrie exacte des cartes réelles ;
+   seul le contenu textuel est remplacé par des blocs neutres.
+--------------------------------------------------------------------------- */
+.season-card--skeleton {
+  pointer-events: none;
+}
+
+.skeleton-block {
+  border-radius: 6px;
+  background: var(--surface-subtle, rgba(255, 255, 255, 0.08));
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+/* Reprend la hauteur de deux lignes de .season-name */
+.season-name.skeleton-block {
+  width: 70%;
+  height: 2.6em;
+}
+
+.skeleton-block--pct {
+  width: 36px;
+  height: 13px;
+}
+
+.skeleton-block--badge {
+  width: 64px;
+  height: 20px;
+  border-radius: 99px;
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* Respect de la préférence système : pas d'animation pour les personnes
+   sensibles au mouvement. */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block {
+    animation: none;
+  }
 }
 </style>
