@@ -42,7 +42,7 @@ describe("useSeasonStore", () => {
     await store.fetchSeason(3);
 
     expect(store.season).toEqual(season);
-    expect(ky.get).toHaveBeenCalledWith(expect.stringContaining("/season/3"));
+    expect(ky.get).toHaveBeenCalledWith(expect.stringContaining("/seasons/3"));
   });
 
   it("fetchSeasonPercentage interroge l'endpoint de progression", async () => {
@@ -51,7 +51,7 @@ describe("useSeasonStore", () => {
     const store = useSeasonStore();
     await store.fetchSeasonPercentage(1);
 
-    expect(ky.get).toHaveBeenCalledWith(expect.stringContaining("/season/1/percent"));
+    expect(ky.get).toHaveBeenCalledWith(expect.stringContaining("/seasons/1/completion"));
     expect(store.season).toEqual({ id: 1, percent: 42 });
   });
 
@@ -61,6 +61,6 @@ describe("useSeasonStore", () => {
     const store = useSeasonStore();
     await store.fetchTeamsBySeason(2);
 
-    expect(ky.get).toHaveBeenCalledWith(expect.stringContaining("/season/2/teams"));
+    expect(ky.get).toHaveBeenCalledWith(expect.stringContaining("/seasons/2/teams"));
   });
 });
