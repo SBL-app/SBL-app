@@ -12,8 +12,13 @@ function urlBase64ToUint8Array(base64String) {
   return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)))
 }
 
-// État partagé entre toutes les instances du composable
-const permission = ref(Notification.permission ?? 'default')
+// État partagé entre toutes les instances du composable.
+// `Notification` est absent des navigateurs sans l'API (iOS Safari < 16.4) et
+// des contextes non sécurisés : l'accès direct au chargement du module ferait
+// planter l'import, et donc toute l'application.
+const permission = ref(
+  typeof Notification !== 'undefined' ? (Notification.permission ?? 'default') : 'default',
+)
 const isSubscribed = ref(false)
 const isLoading = ref(false)
 

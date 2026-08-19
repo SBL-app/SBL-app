@@ -1,5 +1,7 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
+import { setActivePinia, createPinia } from "pinia";
+import { createRouter, createMemoryHistory } from "vue-router";
 import TheNavbar from "../src/components/TheNavbar.vue";
 
 // Stub minimal de RouterLink (rendu en <a>) pour tester le composant isolément.
@@ -8,13 +10,29 @@ const RouterLinkStub = {
   template: "<a :href=\"to\"><slot /></a>",
 };
 
+// Le composant appelle `useRouter().afterEach(...)` : un routeur mémoire suffit.
+function createTestRouter() {
+  return createRouter({
+    history: createMemoryHistory(),
+    routes: [{ path: "/:pathMatch(.*)*", component: { template: "<div />" } }],
+  });
+}
+
 function mountNavbar() {
   return mount(TheNavbar, {
-    global: { stubs: { RouterLink: RouterLinkStub } },
+    global: {
+      plugins: [createTestRouter()],
+      stubs: { RouterLink: RouterLinkStub },
+    },
   });
 }
 
 describe("TheNavbar (accessibilité)", () => {
+  // Le composant consomme le store d'authentification : Pinia doit être actif.
+  beforeEach(() => {
+    setActivePinia(createPinia());
+  });
+
   it("utilise un landmark <nav> avec un libellé", () => {
     const wrapper = mountNavbar();
     const nav = wrapper.find("nav");
