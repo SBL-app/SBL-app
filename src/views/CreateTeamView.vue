@@ -102,12 +102,14 @@ async function submit() {
             maxlength="50"
             placeholder="Nom du joueur"
             class="text-input"
+            :aria-label="`Nom du joueur ${index + 1}`"
           />
           <input
             v-model="player.discord"
             type="text"
             placeholder="Discord (optionnel)"
             class="text-input"
+            :aria-label="`Discord du joueur ${index + 1} (optionnel)`"
           />
           <button
             v-if="players.length > 1"

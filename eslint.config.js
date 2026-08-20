@@ -24,9 +24,25 @@ export default [
     },
     rules: {
       "vue/multi-word-component-names": "off",
+      // Le libellé implicite (contrôle imbriqué dans le <label>) est accessible
+      // et utilisé partout dans l'application. La valeur par défaut de la règle
+      // exige en plus un couple id/for, ce qui n'apporte rien ici.
+      "vuejs-accessibility/label-has-for": [
+        "error",
+        { required: { some: ["nesting", "id"] } },
+      ],
       // Signalé en warning pour ne pas bloquer la CI sur la dette du code
       // existant (imports inutilisés, etc.), tout en restant visible.
       "no-unused-vars": "warn",
+    },
+  },
+  {
+    // Service worker : globals spécifiques (self, clients, caches, skipWaiting…).
+    files: ["src/sw.js"],
+    languageOptions: {
+      globals: {
+        ...globals.serviceworker,
+      },
     },
   },
   {
