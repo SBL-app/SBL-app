@@ -3,7 +3,7 @@ import { useRoute, RouterLink } from "vue-router";
 import { computed, onBeforeMount, ref, watch } from "vue";
 import ky from "ky";
 import { API_URL } from "../../API_URL";
-import { getSeasonStatus, parseApiDate } from "@/utils/format";
+import { getEventStatus, parseApiDate } from "@/utils/format";
 
 const route = useRoute();
 
@@ -12,7 +12,7 @@ const event = ref(null);
 const teams = ref([]);
 const isLoading = ref(true);
 
-const status = computed(() => getSeasonStatus(event.value));
+const status = computed(() => getEventStatus(event.value));
 
 async function loadData(id) {
   isLoading.value = true;
