@@ -13,10 +13,9 @@ function onBeforeInstallPrompt(event) {
 async function install() {
   if (!deferredPrompt.value) return
   deferredPrompt.value.prompt()
-  const { outcome } = await deferredPrompt.value.userChoice
-  if (outcome === 'accepted') {
-    isVisible.value = false
-  }
+  await deferredPrompt.value.userChoice
+  // L'événement ne peut servir qu'une fois : on masque la bannière quel que soit le choix
+  isVisible.value = false
   deferredPrompt.value = null
 }
 
