@@ -1,4 +1,5 @@
 <script setup>
+import { formatDate } from "@/utils/format";
 import { useRoute, RouterLink } from "vue-router";
 import { useSeasonStore } from "@/stores/seasons";
 import { useDivisionStore } from "@/stores/division";
@@ -22,10 +23,6 @@ async function loadData(id) {
 onBeforeMount(() => loadData(route.params.id));
 watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
 
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
-}
 </script>
 <template>
   <div class="page-wrapper">
@@ -167,7 +164,7 @@ function formatDate(dateStr) {
 
 .divisions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
   gap: 20px;
   width: 100%;
 }

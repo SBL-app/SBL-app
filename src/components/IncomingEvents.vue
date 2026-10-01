@@ -4,7 +4,7 @@ import ky from "ky";
 import { API_URL } from "../../API_URL";
 import { useSeasonStore } from "@/stores/seasons";
 import { storeToRefs } from "pinia";
-import { getEventStatus, sortSeasonsByRecent } from "@/utils/format";
+import { formatDate, getEventStatus, sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
 const { fetchAllSeasons } = seasonStore;
@@ -55,11 +55,11 @@ onBeforeMount(() => {
             <span class="meta-sep">·</span>
           </template>
           <div class="dates">
-            <span class="date">{{ lastSeason.start_date }}</span>
+            <span class="date">{{ formatDate(lastSeason.start_date) }}</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" class="arrow-icon">
               <path d="M10.7832 8.66675H2.6665V7.33342H10.7832L7.04984 3.60008L7.99984 2.66675L13.3332 8.00008L7.99984 13.3334L7.04984 12.4001L10.7832 8.66675Z" fill="currentColor"/>
             </svg>
-            <span class="date">{{ lastSeason.end_date }}</span>
+            <span class="date">{{ formatDate(lastSeason.end_date) }}</span>
           </div>
         </div>
         <span

@@ -36,7 +36,7 @@ onBeforeMount(() => {
         <div class="team-avatar">
           <span>{{ (team.name ?? '??').substring(0, 2).toUpperCase() }}</span>
         </div>
-        <p class="team-name">{{ team.name }}</p>
+        <p class="team-name" :title="team.name">{{ team.name }}</p>
       </RouterLink>
     </div>
   </div>
@@ -107,5 +107,35 @@ onBeforeMount(() => {
   font-size: 15px;
   font-weight: 600;
   text-align: center;
+}
+
+/* Mobile : deux colonnes de cartes compactes. */
+@media (max-width: 600px) {
+  .teams-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .team-card {
+    gap: 10px;
+    padding: 16px 10px 14px;
+  }
+
+  .team-avatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .team-avatar span {
+    font-size: 16px;
+  }
+
+  .team-name {
+    max-width: 100%;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 </style>
