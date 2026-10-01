@@ -230,4 +230,16 @@ onUnmounted(() => {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
 }
+
+/* Sur mobile, le bouton n'est pas au bord droit : le panneau ancré dessus
+   débordait de l'écran. On le cale sous la barre, en pleine largeur. */
+@media (max-width: 600px) {
+  .search-dropdown {
+    position: fixed;
+    top: 72px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+  }
+}
 </style>
