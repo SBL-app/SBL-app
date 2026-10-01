@@ -3,7 +3,7 @@ import { useRoute, RouterLink } from "vue-router";
 import { computed, onBeforeMount, ref, watch } from "vue";
 import ky from "ky";
 import { API_URL } from "../../API_URL";
-import { getEventStatus, parseApiDate } from "@/utils/format";
+import { formatDate, getEventStatus } from "@/utils/format";
 
 const route = useRoute();
 
@@ -36,11 +36,6 @@ async function loadData(id) {
 onBeforeMount(() => loadData(route.params.id));
 watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
 
-function formatDate(dateStr) {
-  const date = parseApiDate(dateStr);
-  if (!date) return '';
-  return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
-}
 </script>
 <template>
   <div class="page-wrapper">

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getEventStatus, getSeasonStatus, parseApiDate, sortSeasonsByRecent } from "../src/utils/format.js";
+import { formatDate, getEventStatus, getSeasonStatus, parseApiDate, sortSeasonsByRecent } from "../src/utils/format.js";
 
 describe("parseApiDate", () => {
   it("analyse le format JJ-MM-AAAA renvoyé par l'API", () => {
@@ -103,5 +103,24 @@ describe("getEventStatus", () => {
       cssClass: "done",
     });
     expect(getEventStatus({ start_date: "10-10-2026", end_date: "20-12-2026" }, now).label).toBe("à venir");
+  });
+});
+
+describe("formatDate", () => {
+  it("formate le format JJ-MM-AAAA de l'API sans inverser jour et mois", () => {
+    expect(formatDate("07-11-2022")).toBe(
+      new Date(2022, 10, 7).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" }),
+    );
+  });
+
+  it("accepte le format Doctrine AAAA-MM-JJ HH:MM:SS", () => {
+    expect(formatDate("2025-10-13 20:30:00")).toBe(
+      new Date(2025, 9, 13).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" }),
+    );
+  });
+
+  it("renvoie une chaîne vide plutôt que « Invalid Date »", () => {
+    expect(formatDate(null)).toBe("");
+    expect(formatDate("pas une date")).toBe("");
   });
 });
