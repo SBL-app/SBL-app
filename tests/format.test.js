@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getSeasonStatus, parseApiDate, sortSeasonsByRecent } from "../src/utils/format.js";
+import { getEventStatus, getSeasonStatus, parseApiDate, sortSeasonsByRecent } from "../src/utils/format.js";
 
 describe("parseApiDate", () => {
   it("analyse le format JJ-MM-AAAA renvoyé par l'API", () => {
@@ -73,15 +73,15 @@ describe("getSeasonStatus", () => {
     expect(getSeasonStatus(season("01-09-2026", "01-10-2026", 40), now).key).toBe("active");
   });
 
-  it("indique « terminé » après la date de fin", () => {
+  it("indique « terminée » après la date de fin", () => {
     expect(getSeasonStatus(season("01-06-2026", "30-09-2026", 80), now)).toEqual({
       key: "done",
-      label: "terminé",
+      label: "terminée",
       cssClass: "done",
     });
   });
 
-  it("indique « terminé » quand tous les matchs sont joués, même en chaîne", () => {
+  it("indique « terminée » quand tous les matchs sont joués, même en chaîne", () => {
     // L'API renvoie le pourcentage formaté en chaîne (« 100.00 »).
     expect(getSeasonStatus(season("01-09-2026", "20-12-2026", "100.00"), now).key).toBe("done");
   });
@@ -90,5 +90,18 @@ describe("getSeasonStatus", () => {
     expect(getSeasonStatus({ percentage: "0.00" }, now).key).toBe("upcoming");
     expect(getSeasonStatus({ percentage: "30.00" }, now).key).toBe("active");
     expect(getSeasonStatus(null, now).key).toBe("upcoming");
+  });
+});
+
+describe("getEventStatus", () => {
+  const now = new Date(2026, 9, 1, 15);
+
+  it("reprend le statut de la saison avec un libellé au masculin", () => {
+    expect(getEventStatus({ start_date: "01-06-2026", end_date: "30-09-2026" }, now)).toEqual({
+      key: "done",
+      label: "terminé",
+      cssClass: "done",
+    });
+    expect(getEventStatus({ start_date: "10-10-2026", end_date: "20-12-2026" }, now).label).toBe("à venir");
   });
 });
