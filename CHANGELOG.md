@@ -27,6 +27,8 @@ Développements intégrés sur la branche `dev`, en attente de publication.
 
 ### Corrigé
 
+- **Statut des saisons** — le prochain évènement de la page d'accueil (et les cartes de saison) s'affichait « en cours » avant même son début : le statut (« à venir », « en cours », « terminé ») est désormais déduit des dates de la saison.
+- **Nombre d'équipes du prochain évènement** — la page d'accueil affichait le nombre de saisons au lieu du nombre d'équipes inscrites.
 - **Décalage de mise en page (CLS) sur mobile** — le bloc des saisons s'affichait vide puis poussait le contenu vers le bas à l'arrivée des données. L'espace est désormais réservé dès le premier rendu.
 - Restauration de l'attribut `lang="fr"`, du lien d'évitement et des repères `header` / `main` après la refonte d'interface.
 - Fuite de l'état `isLoading`, contrôle de l'origine dans le service worker, et nettoyage de la fermeture de l'invite d'installation.
