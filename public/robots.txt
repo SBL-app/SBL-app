@@ -1,0 +1,16 @@
+# robots.txt — Splatoon Baguette League
+# https://baguette-league.eu
+
+User-agent: *
+Allow: /
+
+# Les routes protégées par authentification n'ont aucune valeur pour un moteur
+# de recherche : un robot non authentifié y est redirigé et n'obtient aucun
+# contenu indexable.
+Disallow: /teams/create
+
+# Le callback OAuth Discord ne doit jamais être exploré : il porte des
+# paramètres de session à usage unique.
+Disallow: /auth/
+
+Sitemap: https://baguette-league.eu/sitemap.xml
