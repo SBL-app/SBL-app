@@ -16,11 +16,11 @@ onBeforeMount(() => {
     <div class="presentation-card">
       <p class="section-label">Qui sommes-nous ?</p>
       <p class="text" v-if="seasons.length > 0">
-        Créer en 2022, la Splatoon Baguette League se charge d'organiser des
+        Créée en 2022, la Splatoon Baguette League se charge d'organiser des
         ligues sur Splatoon le plus souvent possible afin de soutenir la scène
-        compétitive française présente sur le jeu. Depuis sa création la SBL à
-        assurer {{ seasons.length - 1 }} saisons ainsi que différents tournois gravitant autour de ces
-        saisons et prépare actuellement sa {{ seasons.length }} ème saison.
+        compétitive française présente sur le jeu. Depuis sa création, la SBL a
+        assuré {{ seasons.length - 1 }} saison{{ seasons.length - 1 > 1 ? 's' : '' }} ainsi que différents tournois gravitant autour de ces
+        saisons et prépare actuellement sa {{ seasons.length }}<sup>e</sup> saison.
       </p>
       <p class="text loading" v-else>Chargement...</p>
     </div>
