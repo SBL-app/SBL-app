@@ -94,6 +94,14 @@ function progressStyle(percentage) {
   max-width: 320px;
 }
 
+/* En mobile, la saison en cours occupe toute la largeur comme les autres cartes
+   (saisons précédentes, évènements). */
+@media (max-width: 600px) {
+  .seasons-grid.single {
+    max-width: none;
+  }
+}
+
 .season-card {
   display: flex;
   flex-direction: column;
