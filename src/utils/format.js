@@ -48,6 +48,12 @@ export function sortSeasonsByRecent(seasons) {
 const SEASON_STATUS_LABELS = {
   upcoming: "à venir",
   active: "en cours",
+  done: "terminée",
+};
+
+// Même statut, accordé au masculin pour un « évènement ».
+const EVENT_STATUS_LABELS = {
+  ...SEASON_STATUS_LABELS,
   done: "terminé",
 };
 
@@ -59,7 +65,7 @@ const SEASON_STATUS_CLASSES = {
 
 /**
  * Détermine le statut d'une saison à partir de ses dates : « à venir » avant
- * `start_date`, « terminé » après `end_date` (ou si tous les matchs sont joués),
+ * `start_date`, « terminée » après `end_date` (ou si tous les matchs sont joués),
  * « en cours » sinon. Sans dates exploitables, retombe sur le pourcentage.
  *
  * @param {object|null|undefined} season
@@ -83,4 +89,17 @@ export function getSeasonStatus(season, now = new Date()) {
     key = Number(season?.percentage) > 0 ? "active" : "upcoming";
   }
   return { key, label: SEASON_STATUS_LABELS[key], cssClass: SEASON_STATUS_CLASSES[key] };
+}
+
+/**
+ * Statut d'un évènement (une saison vue comme évènement) : même logique que
+ * `getSeasonStatus`, avec des libellés au masculin (« terminé »).
+ *
+ * @param {object|null|undefined} event
+ * @param {Date} [now]
+ * @returns {{ key: 'upcoming'|'active'|'done', label: string, cssClass: string }}
+ */
+export function getEventStatus(event, now = new Date()) {
+  const status = getSeasonStatus(event, now);
+  return { ...status, label: EVENT_STATUS_LABELS[status.key] };
 }
