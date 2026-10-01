@@ -4,6 +4,12 @@ import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 precacheAndRoute(self.__WB_MANIFEST)
 cleanupOutdatedCaches()
 
+// Mise à jour immédiate (registerType: 'autoUpdate') : sans ça, le nouveau SW
+// reste en attente tant qu'un onglet est ouvert et l'ancien continue de servir
+// l'ancien index.html et l'ancien bundle depuis son précache.
+self.addEventListener('install', () => self.skipWaiting())
+self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()))
+
 // Gestion des notifications push entrantes
 self.addEventListener('push', (event) => {
   if (!event.data) return
