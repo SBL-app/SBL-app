@@ -1,4 +1,5 @@
 <script setup>
+import { formatDate } from "@/utils/format";
 import { useRoute } from "vue-router";
 import { useDivisionStore } from "@/stores/division";
 import { useGameStore } from "@/stores/game";
@@ -106,10 +107,6 @@ async function handleGenerateSchedule() {
 onBeforeMount(() => loadData(route.params.id));
 watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
 
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
-}
 </script>
 <template>
   <div class="page-wrapper" v-if="divisionData">
@@ -131,11 +128,11 @@ function formatDate(dateStr) {
           <span class="col-rank">#</span>
           <span class="col-name">Équipe</span>
           <span class="col-stat">V</span>
-          <span class="col-stat">N</span>
+          <span class="col-stat col-opt">N</span>
           <span class="col-stat">D</span>
-          <span class="col-stat">F</span>
-          <span class="col-stat">MG</span>
-          <span class="col-stat">MP</span>
+          <span class="col-stat col-opt">F</span>
+          <span class="col-stat col-opt">MG</span>
+          <span class="col-stat col-opt">MP</span>
           <span class="col-stat">+/-</span>
           <span class="col-stat">Pts</span>
         </div>
@@ -146,13 +143,13 @@ function formatDate(dateStr) {
           :key="teamRanking.team_id"
         >
           <span class="col-rank rank-num">{{ teamRanking.position }}</span>
-          <span class="col-name">{{ teamRanking.team_name }}</span>
+          <span class="col-name" :title="teamRanking.team_name">{{ teamRanking.team_name }}</span>
           <span class="col-stat">{{ teamRanking.stats.wins }}</span>
-          <span class="col-stat">{{ teamRanking.stats.ties }}</span>
+          <span class="col-stat col-opt">{{ teamRanking.stats.ties }}</span>
           <span class="col-stat">{{ teamRanking.stats.losses }}</span>
-          <span class="col-stat">0</span>
-          <span class="col-stat">{{ teamRanking.stats.winRounds }}</span>
-          <span class="col-stat">{{ teamRanking.stats.looseRounds }}</span>
+          <span class="col-stat col-opt">0</span>
+          <span class="col-stat col-opt">{{ teamRanking.stats.winRounds }}</span>
+          <span class="col-stat col-opt">{{ teamRanking.stats.looseRounds }}</span>
           <span class="col-stat">{{ teamRanking.stats.winRounds - teamRanking.stats.looseRounds }}</span>
           <span class="col-stat pts">{{ teamRanking.stats.points }}</span>
         </div>
@@ -197,13 +194,13 @@ function formatDate(dateStr) {
             <div class="match-card" v-for="game in week.games" :key="game.id">
               <span class="match-date">{{ formatDate(game.date) }}</span>
               <div class="match-teams">
-                <span class="team-name">{{ game.team1 }}</span>
+                <span class="team-name" :title="game.team1">{{ game.team1 }}</span>
                 <div class="match-score">
                   <span class="score">{{ game.score1 }}</span>
                   <span class="vs">VS</span>
                   <span class="score">{{ game.score2 }}</span>
                 </div>
-                <span class="team-name">{{ game.team2 }}</span>
+                <span class="team-name" :title="game.team2">{{ game.team2 }}</span>
               </div>
               <span
                 class="status-badge"
@@ -590,5 +587,55 @@ function formatDate(dateStr) {
 .empty-msg {
   color: var(--text-secondary);
   font-size: 15px;
+}
+
+/* Mobile : classement réduit aux colonnes essentielles et cartes de match
+   qui tiennent dans la largeur de l'écran. */
+@media (max-width: 600px) {
+  .ranking-header,
+  .ranking-row {
+    gap: 4px;
+    padding: 10px 12px;
+  }
+
+  .col-opt {
+    display: none;
+  }
+
+  .col-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .col-stat {
+    width: 30px;
+  }
+
+  .week-card {
+    padding: 16px;
+  }
+
+  .match-card {
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .match-teams {
+    width: 100%;
+    min-width: 0;
+    flex-basis: 100%;
+    gap: 8px;
+  }
+
+  .team-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 </style>

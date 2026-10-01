@@ -5,7 +5,7 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount } from "vue";
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
-import { sortSeasonsByRecent } from "@/utils/format";
+import { formatDate, sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
 const { fetchAllSeasons } = seasonStore;
@@ -18,10 +18,6 @@ onBeforeMount(() => {
   fetchAllSeasons();
 });
 
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
-}
 </script>
 <template>
   <div class="page-wrapper">

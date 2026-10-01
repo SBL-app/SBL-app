@@ -21,8 +21,23 @@ export function parseApiDate(value) {
     const [, day, month, year] = parts;
     return new Date(Number(year), Number(month) - 1, Number(day));
   }
-  const date = new Date(str);
+  // « AAAA-MM-JJ HH:MM:SS » (format Doctrine) : Safari refuse l'espace.
+  const date = new Date(/^\d{4}-\d{2}-\d{2} \d/.test(str) ? str.replace(" ", "T") : str);
   return Number.isNaN(date.getTime()) ? null : date;
+}
+
+/**
+ * Formate une date de l'API pour l'affichage (« 13 oct. 2025 »).
+ * Renvoie une chaîne vide si la date est absente ou illisible, plutôt que
+ * « Invalid Date ».
+ *
+ * @param {string|Date|null|undefined} value
+ * @returns {string}
+ */
+export function formatDate(value) {
+  const date = parseApiDate(value);
+  if (!date) return "";
+  return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
 }
 
 /**
