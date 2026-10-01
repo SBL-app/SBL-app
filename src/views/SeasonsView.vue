@@ -66,7 +66,7 @@ function progressStyle(percentage) {
             </div>
             <span class="progress-pct">{{ season.percentage }}%</span>
           </div>
-          <span class="status-badge done">terminé</span>
+          <span class="status-badge done">terminée</span>
         </router-link>
       </div>
     </div>

@@ -4,7 +4,7 @@ import ky from "ky";
 import { API_URL } from "../../API_URL";
 import { useSeasonStore } from "@/stores/seasons";
 import { storeToRefs } from "pinia";
-import { getSeasonStatus, sortSeasonsByRecent } from "@/utils/format";
+import { getEventStatus, sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
 const { fetchAllSeasons } = seasonStore;
@@ -12,7 +12,7 @@ const { seasons } = storeToRefs(seasonStore);
 
 // La saison la plus récente (et non le dernier élément du tableau brut).
 const lastSeason = computed(() => sortSeasonsByRecent(seasons.value)[0] ?? null);
-const lastSeasonStatus = computed(() => getSeasonStatus(lastSeason.value));
+const lastSeasonStatus = computed(() => getEventStatus(lastSeason.value));
 
 // Nombre d'équipes inscrites à la saison affichée (null tant qu'inconnu).
 const teamCount = ref(null);
