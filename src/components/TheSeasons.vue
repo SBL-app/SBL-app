@@ -102,13 +102,16 @@ function progressStyle(percentage) {
 
 .seasons {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /* auto-fit : les colonnes vides sont supprimées, les cartes occupent toute
+     la largeur et restent centrées quel que soit le nombre de saisons. */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   /* Toutes les rangées à la même hauteur : deux cartes de lignes différentes
      gardent une taille identique. */
   grid-auto-rows: 1fr;
   gap: 20px;
   width: 100%;
-  max-width: 900px;
+  /* Même largeur que la carte « prochain évènement » au-dessus. */
+  max-width: 800px;
 }
 
 .season-card {
