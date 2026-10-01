@@ -44,3 +44,43 @@ export function sortSeasonsByRecent(seasons) {
     return Number(b?.id ?? 0) - Number(a?.id ?? 0);
   });
 }
+
+const SEASON_STATUS_LABELS = {
+  upcoming: "à venir",
+  active: "en cours",
+  done: "terminé",
+};
+
+const SEASON_STATUS_CLASSES = {
+  upcoming: "scheduled",
+  active: "active",
+  done: "done",
+};
+
+/**
+ * Détermine le statut d'une saison à partir de ses dates : « à venir » avant
+ * `start_date`, « terminé » après `end_date` (ou si tous les matchs sont joués),
+ * « en cours » sinon. Sans dates exploitables, retombe sur le pourcentage.
+ *
+ * @param {object|null|undefined} season
+ * @param {Date} [now]
+ * @returns {{ key: 'upcoming'|'active'|'done', label: string, cssClass: string }}
+ */
+export function getSeasonStatus(season, now = new Date()) {
+  const start = parseApiDate(season?.start_date);
+  const end = parseApiDate(season?.end_date);
+  let key;
+  if (Number(season?.percentage) === 100) {
+    key = "done";
+  } else if (start && now < start) {
+    key = "upcoming";
+  } else if (end && now >= new Date(end.getFullYear(), end.getMonth(), end.getDate() + 1)) {
+    // La saison reste « en cours » pendant toute la journée de fin.
+    key = "done";
+  } else if (start || end) {
+    key = "active";
+  } else {
+    key = Number(season?.percentage) > 0 ? "active" : "upcoming";
+  }
+  return { key, label: SEASON_STATUS_LABELS[key], cssClass: SEASON_STATUS_CLASSES[key] };
+}
