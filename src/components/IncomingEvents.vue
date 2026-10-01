@@ -1,8 +1,10 @@
 <script setup>
-import { computed, onBeforeMount } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
+import ky from "ky";
+import { API_URL } from "../../API_URL";
 import { useSeasonStore } from "@/stores/seasons";
 import { storeToRefs } from "pinia";
-import { sortSeasonsByRecent } from "@/utils/format";
+import { getSeasonStatus, sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
 const { fetchAllSeasons } = seasonStore;
@@ -10,6 +12,27 @@ const { seasons } = storeToRefs(seasonStore);
 
 // La saison la plus récente (et non le dernier élément du tableau brut).
 const lastSeason = computed(() => sortSeasonsByRecent(seasons.value)[0] ?? null);
+const lastSeasonStatus = computed(() => getSeasonStatus(lastSeason.value));
+
+// Nombre d'équipes inscrites à la saison affichée (null tant qu'inconnu).
+const teamCount = ref(null);
+
+watch(
+  () => lastSeason.value?.id,
+  async (id) => {
+    teamCount.value = null;
+    if (!id) return;
+    try {
+      const data = await ky.get(`${API_URL}/seasons/${id}/teams`).json();
+      if (lastSeason.value?.id === id) {
+        teamCount.value = Array.isArray(data?.teams) ? data.teams.length : null;
+      }
+    } catch {
+      teamCount.value = null;
+    }
+  },
+  { immediate: true },
+);
 
 onBeforeMount(() => {
   fetchAllSeasons();
@@ -27,8 +50,10 @@ onBeforeMount(() => {
       <div class="event-content">
         <p class="event-name">{{ lastSeason.name }}</p>
         <div class="event-meta">
-          <span class="meta-item">{{ seasons.length }} équipes</span>
-          <span class="meta-sep">·</span>
+          <template v-if="teamCount !== null">
+            <span class="meta-item">{{ teamCount }} équipe{{ teamCount > 1 ? 's' : '' }}</span>
+            <span class="meta-sep">·</span>
+          </template>
           <div class="dates">
             <span class="date">{{ lastSeason.start_date }}</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" class="arrow-icon">
@@ -39,9 +64,9 @@ onBeforeMount(() => {
         </div>
         <span
           class="status-badge"
-          :class="lastSeason.percentage === 100 ? 'done' : 'active'"
+          :class="lastSeasonStatus.cssClass"
         >
-          {{ lastSeason.percentage === 100 ? 'terminé' : 'en cours' }}
+          {{ lastSeasonStatus.label }}
         </span>
       </div>
     </RouterLink>

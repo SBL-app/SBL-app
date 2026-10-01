@@ -4,7 +4,7 @@ import { useSeasonStore } from "@/stores/seasons";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
-import { sortSeasonsByRecent } from "@/utils/format";
+import { getSeasonStatus, sortSeasonsByRecent } from "@/utils/format";
 
 const seasonStore = useSeasonStore();
 const { fetchAllSeasons } = seasonStore;
@@ -20,6 +20,7 @@ const sortedSeasons = computed(() => sortSeasonsByRecent(seasons.value));
 const oldSeasons = computed(() => sortedSeasons.value.slice(1));
 
 const lastSeason = computed(() => sortedSeasons.value[0] ?? null);
+const lastSeasonStatus = computed(() => getSeasonStatus(lastSeason.value));
 
 function progressStyle(percentage) {
   return { width: percentage + "%" };
@@ -41,8 +42,8 @@ function progressStyle(percentage) {
             </div>
             <span class="progress-pct">{{ lastSeason.percentage }}%</span>
           </div>
-          <span class="status-badge" :class="Number(lastSeason.percentage) === 100 ? 'done' : 'active'">
-            {{ Number(lastSeason.percentage) === 100 ? "terminé" : "en cours" }}
+          <span class="status-badge" :class="lastSeasonStatus.cssClass">
+            {{ lastSeasonStatus.label }}
           </span>
         </router-link>
       </div>

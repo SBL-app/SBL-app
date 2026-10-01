@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseApiDate, sortSeasonsByRecent } from "../src/utils/format.js";
+import { getSeasonStatus, parseApiDate, sortSeasonsByRecent } from "../src/utils/format.js";
 
 describe("parseApiDate", () => {
   it("analyse le format JJ-MM-AAAA renvoyé par l'API", () => {
@@ -52,5 +52,43 @@ describe("sortSeasonsByRecent", () => {
   it("gère une entrée absente", () => {
     expect(sortSeasonsByRecent(null)).toEqual([]);
     expect(sortSeasonsByRecent(undefined)).toEqual([]);
+  });
+});
+
+describe("getSeasonStatus", () => {
+  // 1er octobre 2026, 15 h.
+  const now = new Date(2026, 9, 1, 15);
+  const season = (start_date, end_date, percentage = 0) => ({ start_date, end_date, percentage });
+
+  it("indique « à venir » avant la date de début", () => {
+    expect(getSeasonStatus(season("10-10-2026", "20-12-2026"), now)).toEqual({
+      key: "upcoming",
+      label: "à venir",
+      cssClass: "scheduled",
+    });
+  });
+
+  it("indique « en cours » entre les dates, jour de fin inclus", () => {
+    expect(getSeasonStatus(season("01-09-2026", "20-12-2026", 40), now).key).toBe("active");
+    expect(getSeasonStatus(season("01-09-2026", "01-10-2026", 40), now).key).toBe("active");
+  });
+
+  it("indique « terminé » après la date de fin", () => {
+    expect(getSeasonStatus(season("01-06-2026", "30-09-2026", 80), now)).toEqual({
+      key: "done",
+      label: "terminé",
+      cssClass: "done",
+    });
+  });
+
+  it("indique « terminé » quand tous les matchs sont joués, même en chaîne", () => {
+    // L'API renvoie le pourcentage formaté en chaîne (« 100.00 »).
+    expect(getSeasonStatus(season("01-09-2026", "20-12-2026", "100.00"), now).key).toBe("done");
+  });
+
+  it("retombe sur le pourcentage sans dates exploitables", () => {
+    expect(getSeasonStatus({ percentage: "0.00" }, now).key).toBe("upcoming");
+    expect(getSeasonStatus({ percentage: "30.00" }, now).key).toBe("active");
+    expect(getSeasonStatus(null, now).key).toBe("upcoming");
   });
 });
