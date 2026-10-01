@@ -5,8 +5,10 @@ import ThePresentation from "../components/ThePresentation.vue";
 </script>
 
 <template>
-  <IncomingEvents />
-  <TheSeasons />
-  <ThePresentation />
+  <div class="page-wrapper">
+    <IncomingEvents />
+    <TheSeasons />
+    <ThePresentation />
+  </div>
 </template>
 <style scoped></style>
