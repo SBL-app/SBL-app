@@ -121,4 +121,15 @@ onUnmounted(() => document.removeEventListener("mousedown", handleClickOutside))
   background: rgba(239, 68, 68, 0.15);
   color: #ef4444;
 }
+
+/* Sur mobile, seul l'avatar est affiché pour ne pas surcharger la barre. */
+@media (max-width: 600px) {
+  .user-trigger {
+    padding: 3px;
+  }
+
+  .user-name {
+    display: none;
+  }
+}
 </style>
