@@ -85,6 +85,7 @@ function formatDate(dateStr) {
             :key="team.id"
             :to="{ name: 'team', params: { id: team.id } }"
             class="team-card glass-card"
+            :title="team.name"
           >
             <span class="team-initial">{{ team.name?.charAt(0)?.toUpperCase() }}</span>
             <span class="team-name">{{ team.name }}</span>
@@ -215,6 +216,7 @@ function formatDate(dateStr) {
 }
 
 .team-name {
+  min-width: 0;
   font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
@@ -226,5 +228,29 @@ function formatDate(dateStr) {
 .empty {
   color: var(--text-secondary);
   font-size: 16px;
+}
+
+/* Mobile : deux colonnes plutôt qu'une longue liste d'équipes. */
+@media (max-width: 600px) {
+  .teams-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .team-card {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .team-initial {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .team-name {
+    font-size: 13px;
+  }
 }
 </style>
