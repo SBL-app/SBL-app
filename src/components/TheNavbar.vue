@@ -44,7 +44,10 @@ function toggleNotifications() {
       <div class="logo">
         <div class="logo-sbl" role="img" aria-label="Logo Splatoon Baguette League"></div>
         <div class="logo-text">
-          <p>Splatoon Baguette League</p>
+          <p>
+            <span class="logo-full">Splatoon Baguette League</span>
+            <span class="logo-short" aria-hidden="true">SBL</span>
+          </p>
         </div>
       </div>
     </RouterLink>
@@ -95,9 +98,9 @@ function toggleNotifications() {
       </button>
       <div class="nav-auth">
         <TheUserMenu v-if="auth.isAuthenticated" />
-        <a v-else :href="discordLoginUrl" class="login-btn">
-          <div class="discord-logo-sm"></div>
-          Se connecter
+        <a v-else :href="discordLoginUrl" class="login-btn" aria-label="Se connecter avec Discord">
+          <div class="discord-logo-sm" aria-hidden="true"></div>
+          <span class="login-label">Se connecter</span>
         </a>
       </div>
       <div class="socials socials-desktop">
@@ -159,6 +162,15 @@ function toggleNotifications() {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+}
+
+.logo-text {
+  min-width: 0;
+}
+
+.logo-short {
+  display: none;
 }
 
 .logo-sbl {
@@ -270,6 +282,7 @@ function toggleNotifications() {
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
+  white-space: nowrap;
   transition: all 0.2s;
   cursor: pointer;
 }
@@ -398,10 +411,20 @@ function toggleNotifications() {
     display: none;
   }
 
+  .nav {
+    gap: 12px;
+    padding: 0 16px;
+  }
+
   /* Le logo peut rétrécir pour laisser la place à la recherche + hamburger. */
   .logo-link {
     min-width: 0;
     flex-shrink: 1;
+  }
+
+  .nav-right {
+    flex-shrink: 0;
+    gap: 8px;
   }
 
   .logo-text p {
@@ -442,6 +465,43 @@ function toggleNotifications() {
   .socials-in-menu {
     display: flex;
     padding-top: 12px;
+  }
+}
+
+/* Petits écrans : sigle à la place du nom complet, bouton de connexion
+   réduit à l'icône Discord, pour que rien ne se chevauche. */
+@media (max-width: 600px) {
+  .logo {
+    gap: 8px;
+  }
+
+  .logo-sbl {
+    width: 36px;
+    height: 36px;
+  }
+
+  .logo-full {
+    display: none;
+  }
+
+  .logo-short {
+    display: inline;
+    font-size: 18px;
+  }
+
+  .login-btn {
+    justify-content: center;
+    width: 40px;
+    height: 36px;
+    padding: 0;
+  }
+
+  .login-label {
+    display: none;
+  }
+
+  .links {
+    padding: 12px 16px 20px;
   }
 }
 </style>
