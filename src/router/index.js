@@ -8,6 +8,7 @@ import DivisionDetailView from "../views/DivisionDetailView.vue";
 import TeamsView from "@/views/TeamsView.vue";
 import CreateTeamView from "@/views/CreateTeamView.vue";
 import TeamDetailView from "@/views/TeamDetailView.vue";
+import PlayersView from "@/views/PlayersView.vue";
 import PlayerDetailView from "@/views/PlayerDetailView.vue";
 import { useAuthStore } from "@/stores/auth";
 
@@ -63,6 +64,11 @@ const router = createRouter({
       path: "/team/:id",
       name: "team",
       component: TeamDetailView,
+    },
+    {
+      path: "/players",
+      name: "players",
+      component: PlayersView,
     },
     {
       path: "/player/:id",
