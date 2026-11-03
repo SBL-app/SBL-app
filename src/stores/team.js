@@ -64,7 +64,50 @@ export const useTeamStore = defineStore("teams", () => {
     return await response.json();
   };
 
+  /** Équipes de l'utilisateur authentifié : [{team, role, members_count}] */
+  const fetchMyTeams = async () => {
+    const auth = useAuthStore();
+    return await auth.api.get("users/me/teams").json();
+  };
+
+  /** Membres d'une équipe : {team, members: [{role, discord_id, discord_username}]} */
+  const fetchMembers = async (teamId) => {
+    const auth = useAuthStore();
+    return await auth.api.get(`teams/${teamId}/members`).json();
+  };
+
+  const addMember = async (teamId, discordId) => {
+    const auth = useAuthStore();
+    return await auth.api
+      .post(`teams/${teamId}/members`, { json: { discord_id: discordId } })
+      .json();
+  };
+
+  /** Retire un membre (capitaine) ; sans discordId, l'utilisateur quitte l'équipe. */
+  const removeMember = async (teamId, discordId) => {
+    const auth = useAuthStore();
+    await auth.api.delete(`teams/${teamId}/members`, {
+      json: discordId ? { discord_id: discordId } : {},
+    });
+  };
+
+  const leaveTeam = (teamId) => removeMember(teamId, null);
+
+  /** @param {"captain"|"member"} role */
+  const changeRole = async (teamId, discordId, role) => {
+    const auth = useAuthStore();
+    return await auth.api
+      .patch(`teams/${teamId}/members/role`, { json: { discord_id: discordId, role } })
+      .json();
+  };
+
   return {
+    fetchMyTeams,
+    fetchMembers,
+    addMember,
+    removeMember,
+    leaveTeam,
+    changeRole,
     teams,
     team,
     fetchAllTeams,
