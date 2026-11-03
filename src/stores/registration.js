@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import ky from "ky";
 import { API_URL } from "../../API_URL";
+import { useAuthStore } from "@/stores/auth";
 
 export const useRegistrationStore = defineStore("registrations", () => {
   const registrations = ref([]);
@@ -41,7 +42,32 @@ export const useRegistrationStore = defineStore("registrations", () => {
     return await response.json();
   };
 
+  /**
+   * Équipes dont l'utilisateur authentifié est capitaine.
+   * @returns {Promise<Array<{id: number, name: string}>>}
+   */
+  const fetchCaptainTeams = async () => {
+    const auth = useAuthStore();
+    const memberships = await auth.api.get("users/me/teams").json();
+    return memberships
+      .filter((m) => m.role === "captain")
+      .map((m) => m.team);
+  };
+
+  /**
+   * Inscrit une équipe (dont l'utilisateur est capitaine) à une saison.
+   * L'inscription est créée au statut "pending" (validation admin).
+   */
+  const registerTeamToSeason = async (seasonId, teamId) => {
+    const auth = useAuthStore();
+    return await auth.api
+      .post(`seasons/${seasonId}/register`, { json: { team_id: teamId } })
+      .json();
+  };
+
   return {
+    fetchCaptainTeams,
+    registerTeamToSeason,
     registrations,
     registration,
     fetchAllRegistrations,
