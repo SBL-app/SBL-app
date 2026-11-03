@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { createErrorReporter, installErrorReporting } from "../src/utils/errorReporter.js";
 
 function make(overrides = {}) {
@@ -73,5 +73,78 @@ describe("installErrorReporting", () => {
     installErrorReporting(app, { report: vi.fn() });
     app.config.errorHandler(new Error("e"), null, "x");
     expect(previous).toHaveBeenCalled();
+  });
+});
+
+describe("valeurs par défaut", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("envoie via fetch (POST JSON, keepalive) vers /client-logs avec route et url courantes", () => {
+    const fetchMock = vi.fn(() => Promise.resolve());
+    vi.stubGlobal("fetch", fetchMock);
+    createErrorReporter().report(new Error("défaut"));
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toMatch(/\/client-logs$/);
+    expect(init).toMatchObject({ method: "POST", keepalive: true, headers: { "Content-Type": "application/json" } });
+    const payload = JSON.parse(init.body);
+    expect(payload.route).toBe(window.location.pathname);
+    expect(payload.url).toBe(window.location.href);
+  });
+
+  it("source par défaut « window » et stack tronquée", () => {
+    const { send, reporter } = make();
+    const err = new Error("long");
+    err.stack = "s".repeat(9000);
+    reporter.report(err);
+    const payload = JSON.parse(send.mock.calls[0][1]);
+    expect(payload.source).toBe("window");
+    expect(payload.stack).toHaveLength(4000);
+  });
+
+  it("omet la stack quand l'erreur n'en a pas", () => {
+    const { send, reporter } = make();
+    reporter.report("texte seul");
+    expect(JSON.parse(send.mock.calls[0][1]).stack).toBeUndefined();
+  });
+
+  it("distingue deux erreurs de même message mais de stack différente", () => {
+    const { send, reporter } = make();
+    const a = new Error("m"); a.stack = "A";
+    const b = new Error("m"); b.stack = "B";
+    reporter.report(a);
+    expect(reporter.report(b)).toBe(true);
+    expect(send).toHaveBeenCalledTimes(2);
+  });
+
+  it("ne compte pas les doublons dans le plafond", () => {
+    const { send, reporter } = make();
+    for (let i = 0; i < 50; i++) reporter.report("toujours la même");
+    expect(send).toHaveBeenCalledTimes(1);
+  });
+
+  it("window.onerror sans objet error retombe sur le message", () => {
+    const reporter = { report: vi.fn() };
+    installErrorReporting({ config: {} }, reporter);
+    window.dispatchEvent(Object.assign(new Event("error"), { message: "Script error." }));
+    expect(reporter.report).toHaveBeenCalledWith("Script error.", "window.onerror");
+  });
+
+  it("errorHandler Vue sans info utilise une source vide et renvoie le rapporteur", () => {
+    const reporter = { report: vi.fn() };
+    const app = { config: {} };
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(installErrorReporting(app, reporter)).toBe(reporter);
+    app.config.errorHandler(new Error("e"));
+    expect(reporter.report).toHaveBeenCalledWith(expect.any(Error), "vue:");
+    spy.mockRestore();
+  });
+
+  it("l'errorHandler précédent remplace console.error", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const app = { config: { errorHandler: vi.fn() } };
+    installErrorReporting(app, { report: vi.fn() });
+    app.config.errorHandler(new Error("e"), null, "x");
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
   });
 });
