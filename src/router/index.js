@@ -9,6 +9,7 @@ import TeamsView from "@/views/TeamsView.vue";
 import CreateTeamView from "@/views/CreateTeamView.vue";
 import TeamDetailView from "@/views/TeamDetailView.vue";
 import PlayersView from "@/views/PlayersView.vue";
+import MyTeamsView from "@/views/MyTeamsView.vue";
 import PlayerDetailView from "@/views/PlayerDetailView.vue";
 import { useAuthStore } from "@/stores/auth";
 
@@ -58,6 +59,12 @@ const router = createRouter({
       path: "/teams/create",
       name: "team-create",
       component: CreateTeamView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/my-teams",
+      name: "my-teams",
+      component: MyTeamsView,
       meta: { requiresAuth: true },
     },
     {
