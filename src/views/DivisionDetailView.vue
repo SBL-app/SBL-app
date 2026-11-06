@@ -5,6 +5,7 @@ import { useDivisionStore } from "@/stores/division";
 import { useGameStore } from "@/stores/game";
 import { useGameStatusStore } from "@/stores/gameStatus";
 import { useAuthStore } from "@/stores/auth";
+import { filterWeeks } from "@/utils/planning";
 import { onBeforeMount, watch, ref, computed } from "vue";
 
 const route = useRoute();
@@ -28,6 +29,15 @@ const scheduleStartDate = ref("");
 const generating = ref(false);
 const scheduleError = ref("");
 const hasSchedule = computed(() => games.value.length > 0);
+
+// Filtre du planning
+const scheduleFilter = ref("all");
+const filterOptions = [
+  { value: "upcoming", label: "À venir" },
+  { value: "all", label: "Tous" },
+  { value: "played", label: "Joués" },
+];
+const visibleWeeks = computed(() => filterWeeks(games.value, scheduleFilter.value));
 
 async function loadData(id) {
   try {
@@ -130,7 +140,6 @@ watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
           <span class="col-stat">V</span>
           <span class="col-stat col-opt">N</span>
           <span class="col-stat">D</span>
-          <span class="col-stat col-opt">F</span>
           <span class="col-stat col-opt">MG</span>
           <span class="col-stat col-opt">MP</span>
           <span class="col-stat">+/-</span>
@@ -147,7 +156,6 @@ watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
           <span class="col-stat">{{ teamRanking.stats.wins }}</span>
           <span class="col-stat col-opt">{{ teamRanking.stats.ties }}</span>
           <span class="col-stat">{{ teamRanking.stats.losses }}</span>
-          <span class="col-stat col-opt">0</span>
           <span class="col-stat col-opt">{{ teamRanking.stats.winRounds }}</span>
           <span class="col-stat col-opt">{{ teamRanking.stats.looseRounds }}</span>
           <span class="col-stat">{{ teamRanking.stats.winRounds - teamRanking.stats.looseRounds }}</span>
@@ -187,8 +195,20 @@ watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
         <p v-if="scheduleError" class="schedule-error">{{ scheduleError }}</p>
       </div>
 
-      <div class="planning-list" v-if="games.length > 0">
-        <div class="week-card glass-card" v-for="week in games" :key="week.week">
+      <div v-if="games.length > 0" class="schedule-filter" role="group" aria-label="Filtrer le planning">
+        <button
+          v-for="opt in filterOptions"
+          :key="opt.value"
+          type="button"
+          class="btn-filter"
+          :class="{ active: scheduleFilter === opt.value }"
+          :aria-pressed="scheduleFilter === opt.value"
+          @click="scheduleFilter = opt.value"
+        >{{ opt.label }}</button>
+      </div>
+
+      <div class="planning-list" v-if="visibleWeeks.length > 0">
+        <div class="week-card glass-card" v-for="week in visibleWeeks" :key="week.week">
           <p class="week-title">Semaine {{ week.week }}</p>
           <div class="matches">
             <div class="match-card" v-for="game in week.games" :key="game.id">
@@ -220,6 +240,7 @@ watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
       </div>
       <p v-if="reportError" class="schedule-error">{{ reportError }}</p>
       <p v-if="games.length === 0" class="empty-msg">Aucun match prévu</p>
+      <p v-else-if="visibleWeeks.length === 0" class="empty-msg">Aucun match pour ce filtre</p>
     </div>
 
     <!-- Équipes -->
@@ -245,6 +266,27 @@ watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
   </div>
 </template>
 <style scoped>
+.schedule-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.btn-filter {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-filter.active {
+  color: var(--text-primary, #fff);
+  border-color: currentColor;
+}
+
 .breadcrumb {
   display: flex;
   align-items: center;
