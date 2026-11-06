@@ -11,6 +11,7 @@ import TeamDetailView from "@/views/TeamDetailView.vue";
 import PlayersView from "@/views/PlayersView.vue";
 import MyTeamsView from "@/views/MyTeamsView.vue";
 import PlayerDetailView from "@/views/PlayerDetailView.vue";
+import MatchProposalsView from "@/views/MatchProposalsView.vue";
 import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
@@ -81,6 +82,12 @@ const router = createRouter({
       path: "/player/:id",
       name: "player",
       component: PlayerDetailView,
+    },
+    {
+      path: "/proposals",
+      name: "proposals",
+      component: MatchProposalsView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/:pathMatch(.*)*",
