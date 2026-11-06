@@ -5,6 +5,7 @@ import { useSeasonStore } from "@/stores/seasons";
 import { useDivisionStore } from "@/stores/division";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, watch } from "vue";
+import SeasonRegistration from "@/components/SeasonRegistration.vue";
 
 const route = useRoute();
 const seasonStore = useSeasonStore();
@@ -46,6 +47,8 @@ watch(() => route.params.id, (newId) => { if (newId) loadData(newId); });
         </div>
       </div>
     </div>
+
+    <SeasonRegistration :season="season" />
 
     <!-- Divisions -->
     <div class="divisions-section">
