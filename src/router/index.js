@@ -12,6 +12,7 @@ import PlayersView from "@/views/PlayersView.vue";
 import MyTeamsView from "@/views/MyTeamsView.vue";
 import PlayerDetailView from "@/views/PlayerDetailView.vue";
 import MatchProposalsView from "@/views/MatchProposalsView.vue";
+import NotificationSettingsView from "@/views/NotificationSettingsView.vue";
 import StatusView from "@/views/StatusView.vue";
 import { useAuthStore } from "@/stores/auth";
 
@@ -88,6 +89,12 @@ const router = createRouter({
       path: "/proposals",
       name: "proposals",
       component: MatchProposalsView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/notifications",
+      name: "notifications",
+      component: NotificationSettingsView,
       meta: { requiresAuth: true },
     },
     {

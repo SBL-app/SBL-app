@@ -60,6 +60,7 @@ function toggleNotifications() {
       <RouterLink to="/players">joueurs</RouterLink>
       <RouterLink v-if="auth.isAuthenticated" to="/my-teams">mes équipes</RouterLink>
       <RouterLink v-if="auth.isAuthenticated" to="/proposals">propositions</RouterLink>
+      <RouterLink v-if="auth.isAuthenticated" to="/notifications">notifications</RouterLink>
       <div class="socials socials-in-menu">
         <a href="https://discord.gg/SJgnEYQwcV" target="_blank" rel="noopener noreferrer" aria-label="Rejoindre le serveur Discord (nouvel onglet)">
           <div class="discord-logo" aria-hidden="true"></div>
