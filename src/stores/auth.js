@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("auth", () => {
   const token = ref(null);
 
   const isAuthenticated = computed(() => !!token.value && !!user.value);
+  const isAdmin = computed(() => !!user.value?.roles?.includes("ROLE_ADMIN"));
 
   /**
    * Instance ky authentifiée.
@@ -110,5 +111,5 @@ export const useAuthStore = defineStore("auth", () => {
     localStorage.removeItem(STORAGE_KEY);
   }
 
-  return { user, token, isAuthenticated, api, loadFromStorage, initFromCallback, logout, refreshToken };
+  return { user, token, isAuthenticated, isAdmin, api, loadFromStorage, initFromCallback, logout, refreshToken };
 });
