@@ -12,6 +12,7 @@ import PlayersView from "@/views/PlayersView.vue";
 import MyTeamsView from "@/views/MyTeamsView.vue";
 import PlayerDetailView from "@/views/PlayerDetailView.vue";
 import MatchProposalsView from "@/views/MatchProposalsView.vue";
+import AdminDashboardView from "@/views/AdminDashboardView.vue";
 import StatusView from "@/views/StatusView.vue";
 import { useAuthStore } from "@/stores/auth";
 
@@ -91,6 +92,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: "/admin",
+      name: "admin",
+      component: AdminDashboardView,
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
       path: "/status",
       name: "status",
       component: StatusView,
@@ -109,6 +116,9 @@ router.beforeEach((to) => {
     const auth = useAuthStore();
     if (!auth.isAuthenticated) {
       return { name: "home", query: { login: "required", redirect: to.fullPath } };
+    }
+    if (to.meta.requiresAdmin && !auth.isAdmin) {
+      return { name: "home" };
     }
   }
 });
