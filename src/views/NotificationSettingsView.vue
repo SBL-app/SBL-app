@@ -4,8 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 
 const auth = useAuthStore();
 
-const channels = ref({ discord: true, push: false, mail: false });
-const email = ref("");
+const channels = ref({ discord: true, push: false });
 const loading = ref(true);
 const saving = ref(false);
 const error = ref("");
@@ -14,12 +13,10 @@ const saved = ref(false);
 const LABELS = {
   discord: "Discord (message privé)",
   push: "Notification push (navigateur / mobile)",
-  mail: "Email",
 };
 
 function apply(data) {
-  channels.value = { discord: false, push: false, mail: false, ...data.channels };
-  email.value = data.email ?? "";
+  channels.value = { discord: false, push: false, ...data.channels };
 }
 
 onMounted(async () => {
@@ -35,16 +32,12 @@ onMounted(async () => {
 async function save() {
   error.value = "";
   saved.value = false;
-  if (channels.value.mail && !email.value.trim()) {
-    error.value = "Un email est requis pour activer les notifications par mail.";
-    return;
-  }
   saving.value = true;
   try {
     apply(
       await auth.api
         .put("users/me/notification-preferences", {
-          json: { channels: channels.value, email: email.value.trim() },
+          json: { channels: channels.value },
         })
         .json()
     );
@@ -52,7 +45,7 @@ async function save() {
   } catch (e) {
     error.value =
       e?.response?.status === 422
-        ? "Email invalide ou préférences refusées."
+        ? "Préférences refusées."
         : "Échec de l'enregistrement.";
   } finally {
     saving.value = false;
@@ -68,10 +61,6 @@ async function save() {
       <label v-for="(label, key) in LABELS" :key="key" class="row">
         <input v-model="channels[key]" type="checkbox" :data-test="`channel-${key}`" />
         {{ label }}
-      </label>
-      <label class="row">
-        Email
-        <input v-model="email" type="email" placeholder="vous@exemple.fr" data-test="email" />
       </label>
       <button type="submit" :disabled="saving">Enregistrer</button>
       <p v-if="error" role="alert">{{ error }}</p>
